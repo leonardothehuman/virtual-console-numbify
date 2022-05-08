@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Virtual_Console_Numbify_fw.StepGenerators{
     internal class GenerateNeoGeoBannerGenerator{
-        public static VirtualConsoleInjectionStep generate(string iconFilePath, string title){
+        public static VirtualConsoleInjectionStep Generate(string iconFilePath, string title){
             FileStream destinationStream = null;
             FileStream originBanner = null;
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
@@ -19,8 +19,8 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
             };
             toReturn.process = async (InjectionEnviorunment env, MainWindowComunicator com) => {
                 com.reportProgress("Generating icon ...", toReturn.milestoneList[0]);
-                Directory.CreateDirectory(Path.Combine(env.autoinjectwadPath, "icons"));
-                if (env.workingNeoGeoBannerContainer == ""){
+                Directory.CreateDirectory(Path.Combine(env.AutoinjectwadPath, "icons"));
+                if (env.WorkingNeoGeoBannerContainer == ""){
                     await com.showFrontendMessage(
                         "The base wad file don't have a banner.bin, it's not possible to inject a save icon",
                         "Warning", RecipeButtonsType.ok
@@ -34,12 +34,12 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                     new string[] {
                         "-sys", "neogeo",
                         "-s", "\""+iconFilePath+"\"",
-                        "-d", "\""+Path.Combine(env.autoinjectwadPath, @"icons\")+"\"",
+                        "-d", "\""+Path.Combine(env.AutoinjectwadPath, @"icons\")+"\"",
                         "-m", "s"
                     },
                     true
                 );
-                string destinationFile = Path.Combine(env.workingNeoGeoBannerContainer, "banner.bin");
+                string destinationFile = Path.Combine(env.WorkingNeoGeoBannerContainer, "banner.bin");
                 File.Delete(destinationFile);
 
                 com.reportProgress("Injecting banner ...", toReturn.milestoneList[1]);
@@ -58,7 +58,7 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                 }
 
                 originBanner = new FileStream(
-                    Path.Combine(new string[] { env.autoinjectwadPath, @"icons", "banner.tpl" }),
+                    Path.Combine(new string[] { env.AutoinjectwadPath, @"icons", "banner.tpl" }),
                     FileMode.Open, FileAccess.Read, FileShare.Read,
                     4096, FileOptions.Asynchronous | FileOptions.SequentialScan
                 );
@@ -78,13 +78,13 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                 if (originBanner != null){
                     originBanner.Dispose();
                 }
-                Helpers.removeAllDirectoriesFromDirectory(env.autoinjectwadPath);
+                Helpers.RemoveAllDirectoriesFromDirectory(env.AutoinjectwadPath);
             };
             toReturn.preEverythingCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-                Helpers.removeAllDirectoriesFromDirectory(env.autoinjectwadPath);
+                Helpers.RemoveAllDirectoriesFromDirectory(env.AutoinjectwadPath);
             };
             toReturn.processCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-                Directory.Delete(Path.Combine(env.autoinjectwadPath, @"icons"), true);
+                Directory.Delete(Path.Combine(env.AutoinjectwadPath, @"icons"), true);
             };
             return toReturn;
         }

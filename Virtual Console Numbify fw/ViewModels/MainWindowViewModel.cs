@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -211,7 +212,7 @@ namespace Virtual_Console_Numbify_fw
             }
         }
 
-        private bool allFieldsAreEnabled = true;
+        private bool allFieldsAreEnabled = false;
         public bool AllFieldsAreEnabled{
             get { return allFieldsAreEnabled; }
             set {
@@ -254,13 +255,18 @@ namespace Virtual_Console_Numbify_fw
         MainWindowComunicator.ShowFrontendMessage frontendMessageDelegate = null;
         public delegate Task<string> BrowseFileDelegate(string fileFilter);
         public delegate Task<string> BrowseDirectoryDelegate(string title);
+        public delegate Task<string> SaveFileDelegate(string fileFilter, string title);
         private BrowseFileDelegate browseFileDelegate;
         private BrowseDirectoryDelegate browseDirectoryDelegate;
-        public MainWindowViewModel(MainWindowComunicator.ShowFrontendMessage del, BrowseFileDelegate bfd, BrowseDirectoryDelegate bdd)
-        {
+        private SaveFileDelegate saveFileDelegate;
+        public MainWindowViewModel(
+            MainWindowComunicator.ShowFrontendMessage del, BrowseFileDelegate bfd,
+            BrowseDirectoryDelegate bdd, SaveFileDelegate sfd
+        ){
             frontendMessageDelegate = del;
             browseFileDelegate = bfd;
             browseDirectoryDelegate = bdd;
+            saveFileDelegate = sfd;
 
             Dictionary<string, string> fieldFileTypes = new Dictionary<string, string>();
             fieldFileTypes.Add("BaseWad", "WiiWare file (*.wad)|*.wad|All files (*.*)|*.*");
@@ -307,99 +313,122 @@ namespace Virtual_Console_Numbify_fw
 
             Inject = new Command((object obj) => {
                 runAsync f = async delegate () {
-                    AllFieldsAreEnabled = false;
-                    SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-                    saveFileDialog1.Filter = "WiiWare file (*.wad)|*.wad|All files (*.*)|*.*";
-                    saveFileDialog1.Title = "Where to save the injected file ...";
-
-                    if (saveFileDialog1.ShowDialog() != true){
-                        AllFieldsAreEnabled = true;
-                        return;
-                    }
-
                     try{
+                        AllFieldsAreEnabled = false;
+
+                        BaseWad = BaseWad.Trim();
+                        RomFileCompletePath = RomFileCompletePath.Trim();
+                        BannerImageCompletePath = BannerImageCompletePath.Trim();
+                        IconImageCompletePath = IconImageCompletePath.Trim();
+                        SaveIconCompletePath = SaveIconCompletePath.Trim();
+
+                        ChannelNameTitle = ChannelNameTitle.Trim();
+                        BannerTitle = BannerTitle.Trim();
+                        BannerYear = BannerYear.Trim();
+                        BannerMaximumPlayerCount = BannerMaximumPlayerCount.Trim();
+                        SaveName = SaveName.Trim();
+                        NewId = NewId.Trim();
+
+                        if (!File.Exists(BaseWad)) { throw new Exception("The specified base wad file does not exists"); }
+                        if (selectedConsole == Console.NGAES) {
+                            if (!Directory.Exists(RomFileCompletePath)) {
+                                throw new Exception("The specified rom directory does not exists");
+                            }
+                            if(!Helpers.CheckIfDirectoryHasAtLeastOneFileWithAnSpecifiedExtension(romFileCompletePath, ".bin")) {
+                                throw new Exception(
+                                    "The selected directory does not seem to be a Neo Geo Aes rom directory"
+                                );
+                            }
+                        } else {
+                            if (!File.Exists(RomFileCompletePath)) {
+                                throw new Exception("The specified rom file does not exists");
+                            }
+                        }
+                        if (!File.Exists(BannerImageCompletePath)) { throw new Exception("The specified banner image does not exists"); }
+                        if (!File.Exists(IconImageCompletePath)) { throw new Exception("The specified icon image does not exists"); }
+                        if (!File.Exists(SaveIconCompletePath)) { throw new Exception("The specified save icon does not exist"); }
+
+                        string fileToSave = await saveFileDelegate(
+                            "WiiWare file (*.wad)|*.wad|All files (*.*)|*.*",
+                            "Where to save the injected file ..."
+                        );
+
+                        if (fileToSave == "") {
+                            AllFieldsAreEnabled = true;
+                            return;
+                        }
+                        if (File.Exists(fileToSave)) { throw new Exception("You can not specify an existing output file"); }
                         InjectionEnviorunment enviorunment = new InjectionEnviorunment();
-                        string exePath = Helpers.RemoveProtocolFromBase(Assembly.GetExecutingAssembly().GetName().CodeBase);
-                        string path = Path.GetDirectoryName(exePath);
-                        enviorunment.externalToolsBasePath = Path.Combine(path, "externalTools");
-                        enviorunment.finalWadFile = saveFileDialog1.FileName;
+                        //enviorunment.ExternalToolsBasePath = Path.Combine(Helpers.GetExeDirectory(), "externalTools");
+                        //enviorunment.ExternalToolsBasePath = @"C:\Users\Leonardo\Desktop";
+                        enviorunment.FinalWadFile = fileToSave;
                         enviorunment.console = (Console)SelectedConsole;
-                        try { File.Delete(System.IO.Path.Combine(enviorunment.autoinjectwadPath, "initial.wad")); } catch { }
+                        try { File.Delete(System.IO.Path.Combine(enviorunment.AutoinjectwadPath, "initial.wad")); } catch { }
                         await Helpers.CopyFileAsync(
                             BaseWad,
-                            System.IO.Path.Combine(enviorunment.autoinjectwadPath, "initial.wad")
+                            System.IO.Path.Combine(enviorunment.AutoinjectwadPath, "initial.wad")
                         );
-                        enviorunment.workingWad = System.IO.Path.Combine(enviorunment.autoinjectwadPath, "initial.wad");
+                        enviorunment.WorkingWad = System.IO.Path.Combine(enviorunment.AutoinjectwadPath, "initial.wad");
 
                         VirtualConsoleInjectionRecipe recipe = new VirtualConsoleInjectionRecipe(enviorunment, PauseOnEveryStep);
                         recipe.progressReported += (object sender2, ProgressReportEventArgs args) => {
                             Status = args.progressMessage;
                             Progress = args.progressNumber;
                         };
-                        recipe.setFrontendMessageDelegate(frontendMessageDelegate);
-                        
+                        recipe.SetFrontendMessageDelegate(frontendMessageDelegate);
 
                         if (enviorunment.console != Console.SMS){
-                            recipe.addStep(InjectNewRomGenerator.generate(RomFileCompletePath));
+                            recipe.AddStep(InjectNewRomGenerator.Generate(RomFileCompletePath));
                         }
-                        recipe.addStep(CustomizeGeneratedWadGenerator.generate(
+                        recipe.AddStep(CustomizeGeneratedWadGenerator.Generate(
                             ChannelNameTitle, NewId, UseLz7, BannerImageCompletePath, IconImageCompletePath,
                             BannerTitle, Int32.Parse(BannerYear), Int32.Parse(BannerMaximumPlayerCount)
                         ));
-                        recipe.addStep(ExtractWadGenerator.generate());
-                        recipe.addStep(ExtractZeroFiveGenerator.generate());
+                        recipe.AddStep(ExtractWadGenerator.Generate());
+                        recipe.AddStep(ExtractZeroFiveGenerator.Generate());
 
                         if (enviorunment.console == Console.NGAES)
-                            recipe.addStep(FindNeoGeoBannerBinGenerator.generate());
+                            recipe.AddStep(FindNeoGeoBannerBinGenerator.Generate());
 
-                        if (enviorunment.console == Console.SMD || enviorunment.console == Console.SMS)
-                        {
-                            recipe.addStep(ExtractDataCcfGenerator.generate(AllowEditing, 0, false, DisableAutoitXAlert));
-                            recipe.addStep(ExtractDataCcfGenerator.generate(AllowEditing, 1, false, DisableAutoitXAlert));
-                        }
-                        if (enviorunment.console == Console.SMS)
-                        {
-                            recipe.addStep(ReplaceSMSRom.generate(RomFileCompletePath));
+                        if (enviorunment.console == Console.SMD || enviorunment.console == Console.SMS){
+                            recipe.AddStep(ExtractDataCcfGenerator.Generate(AllowEditing, 0, false, DisableAutoitXAlert));
+                            recipe.AddStep(ExtractDataCcfGenerator.Generate(AllowEditing, 1, false, DisableAutoitXAlert));
+                        }if (enviorunment.console == Console.SMS){
+                            recipe.AddStep(ReplaceSMSRom.Generate(RomFileCompletePath));
                         }
 
-                        if (enviorunment.console == Console.NGAES)
-                        {
-                            recipe.addStep(GenerateNeoGeoBannerGenerator.generate(SaveIconCompletePath, SaveName));
-                        }
-                        else
-                        {
-                            recipe.addStep(ReplaceIconFromExtracted.generate(
+                        if (enviorunment.console == Console.NGAES){
+                            recipe.AddStep(GenerateNeoGeoBannerGenerator.Generate(SaveIconCompletePath, SaveName));
+                        }else{
+                            recipe.AddStep(ReplaceIconFromExtracted.Generate(
                                 SaveIconCompletePath, SaveName, AllowEditing, DisableAutoitXAlert
                             ));
                         }
-                        recipe.addStep(RemoveManualFromExtractedGenerator.generate());
+                        recipe.AddStep(RemoveManualFromExtractedGenerator.Generate());
 
-                        if (enviorunment.console == Console.SMD || enviorunment.console == Console.SMS)
-                        {
-                            recipe.addStep(ExtractDataCcfGenerator.generate(AllowEditing, 1, true, DisableAutoitXAlert));
-                            recipe.addStep(ExtractDataCcfGenerator.generate(AllowEditing, 0, true, DisableAutoitXAlert));
+                        if (enviorunment.console == Console.SMD || enviorunment.console == Console.SMS){
+                            recipe.AddStep(ExtractDataCcfGenerator.Generate(AllowEditing, 1, true, DisableAutoitXAlert));
+                            recipe.AddStep(ExtractDataCcfGenerator.Generate(AllowEditing, 0, true, DisableAutoitXAlert));
                         }
 
                         if (enviorunment.console == Console.NGAES)
-                            recipe.addStep(PackNeoGeoBannerIfInADifferentFile.generate());
+                            recipe.AddStep(PackNeoGeoBannerIfInADifferentFile.Generate());
 
-                        recipe.addStep(PackZeroFiveGenerator.generate());
-                        recipe.addStep(PackExtractedWadGenerator.generate());
-                        await recipe.executeSteps();
+                        recipe.AddStep(PackZeroFiveGenerator.Generate());
+                        recipe.AddStep(PackExtractedWadGenerator.Generate());
+                        await recipe.ExecuteSteps();
 
                         await frontendMessageDelegate(
-                            "Your injected virtual console wad has been generated, the nintendo wii is " +
+                            "Your injected virtual console wad has been generated, the Nintendo Wii is " +
                             "a very fragile system, so please, no matter how perfect the injection tool " +
                             "claims to be, always test the wad file on an emunand before installing it on " +
                             "a real nand, and, before installing it on real nand, be sure that you have " +
-                            "priiloader installed and it is working properly !!!",
+                            "priiloader and bootmii installed and they are working properly !!!",
                             "Finished !!!",
                             RecipeButtonsType.ok
                         );
                         ResetAllFields();
-                    }
-                    catch (Exception ex)
-                    {
+                    }catch (Exception ex){
                         await frontendMessageDelegate(
                             ex.Message,
                             "Error !!!",
@@ -423,24 +452,28 @@ namespace Virtual_Console_Numbify_fw
                     return false;
                 }
                 if (!Helpers.IsAValidWinPath(RomFileCompletePath.Trim())){
-                    Status = "You must specify a Rom file";
+                    if (selectedConsole == Console.NGAES) {
+                        Status = "You must specify a rom directory";
+                    } else {
+                        Status = "You must specify a rom file";
+                    }
                     return false;
                 }
                 if (!Helpers.IsAValidWinPath(BannerImageCompletePath.Trim())){
-                    Status = "You must specify an image to use on banner";
+                    Status = "You must specify an image to use on the banner";
                     return false;
                 }
                 if (!Helpers.IsAValidWinPath(IconImageCompletePath.Trim())){
-                    Status = "You must specify an image to use as icon";
+                    Status = "You must specify an image to use as an icon";
                     return false;
                 }
                 if (!Helpers.IsAValidWinPath(SaveIconCompletePath.Trim())){
-                    Status = "You must specify an image to use as save icon";
+                    Status = "You must specify an image to use as a save icon";
                     return false;
                 }
 
                 if (ChannelNameTitle.Trim().Length <= 0){
-                    Status = "You must specify a the channel title";
+                    Status = "You must specify the channel title";
                     return false;
                 }
                 if (BannerTitle.Trim().Length <= 0){
@@ -459,7 +492,7 @@ namespace Virtual_Console_Numbify_fw
                     Status = "You must specify the name of the save file";
                     return false;
                 }
-                if (NewId.Trim().Length > 0 && NewId.Length < 4){
+                if (NewId.Trim().Length > 0 && NewId.Trim().Length < 4){
                     Status = "You must specify a valid Wad id or leave it empty";
                     return false;
                 }
@@ -468,6 +501,57 @@ namespace Virtual_Console_Numbify_fw
 
                 return true;
             });
+
+            runAsync f2 = async delegate () {
+                try {
+                    if (!File.Exists(Path.Combine(Helpers.GetExeDirectory(), "common-key.bin"))) {
+                        Status = "common-key.bin not found";
+                        await frontendMessageDelegate(
+                            "The common-key.bin file was not found, please, put this file on the program's directory and try again\n" +
+                            "\n" +
+                            //"But, where can you find this file ?, well, the only legalized criminal gang in this world does not allow me to redistribute this file, so you have to find it on your own, in the same place that you got the rom (I know that it was not on a physical cartridge that you own :-) ), you also have the option to extract it from your own Wii, which is the harder, but the legalized method of doing that ...\n" +
+                            "But, where can you find this file? well, you have to find it on your own for legal reasons. You should extract it from your own Wii ...\n" +
+                            "\n" +
+                            "You can also put an empty file instead of the real common-key.bin, but the injection process will fail :-(", "Error: common-key.bin not found", RecipeButtonsType.ok);
+                        return;
+                    };
+                    InjectionEnviorunment env = new InjectionEnviorunment();
+                    File.Delete(Path.Combine(env.AutoinjectwadPath, "common-key.bin"));
+                    //if (!File.Exists(Path.Combine(env.AutoinjectwadPath, "common-key.bin"))) {
+                    await Helpers.CopyFileAsync(
+                        Path.Combine(Helpers.GetExeDirectory(), "common-key.bin"),
+                        Path.Combine(env.AutoinjectwadPath, "common-key.bin")
+                    );
+                    //}
+                    File.Delete(Path.Combine(env.DevilkenInjectorPath, "common-key.bin"));
+                    //if (!File.Exists(Path.Combine(env.DevilkenInjectorPath, "common-key.bin"))) {
+                    await Helpers.CopyFileAsync(
+                        Path.Combine(Helpers.GetExeDirectory(), "common-key.bin"),
+                        Path.Combine(env.DevilkenInjectorPath, "common-key.bin")
+                    );
+                   // }
+                    if(
+                        !File.Exists(Path.Combine(Environment.SystemDirectory, "FM20.DLL")) ||
+                        !File.Exists(Path.Combine(Environment.SystemDirectory, "msvbvm60.dll"))
+                    ) {
+                        await frontendMessageDelegate(
+                            "Don't forget to read the readme.txt file to ensure that all required libraries are installed.\n" +
+                            "\n" +
+                            "It seems like one of the prerequisites is not installed, but, since I am not sure if the checks are 100% correct, I will let you use the application, just, read the readme.txt file again if something goes wrong and ALWAYS TEST THE OUPUT WAD on an emunand before installing it on the real nand.",
+                            "Alert",
+                            RecipeButtonsType.ok
+                        );
+                    }
+                    AllFieldsAreEnabled = true;
+                } catch (Exception ex) {
+                    await frontendMessageDelegate(
+                        ex.Message,
+                        "Error !!!",
+                        RecipeButtonsType.ok
+                    );
+                }
+            };
+            f2();
         }
     }
 }

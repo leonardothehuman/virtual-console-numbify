@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -117,7 +118,7 @@ namespace Virtual_Console_Numbify_fw{
             //string output = pProcess.StandardOutput.ReadToEnd(); //The output result
             return toReturn.Task;
         }
-        public static void extractBannerBrlyt(WAD wadFile, string destinationPath){
+        public static void ExtractBannerBrlyt(WAD wadFile, string destinationPath){
             string fileNameToExtract = "banner.brlyt";
 
             U8 banner = new U8();
@@ -139,7 +140,7 @@ namespace Virtual_Console_Numbify_fw{
             File.WriteAllBytes(destinationPath, banner.Data[banner.GetNodeIndex(fileNameToExtract)]);
         }
 
-        public static void replaceBannerBrlyt(WAD wadFile, string replacementPath){
+        public static void ReplaceBannerBrlyt(WAD wadFile, string replacementPath){
             string fileNameToReplace = "banner.brlyt";
 
             U8 banner = new U8();
@@ -168,14 +169,14 @@ namespace Virtual_Console_Numbify_fw{
                 { wadFile.BannerApp.ReplaceFile(i, banner.ToByteArray()); break; }
             
         }
-        public static Image resizeImage(Image img, int x, int y){
+        public static Image ResizeImage(Image img, int x, int y){
             Image newimage = new Bitmap(x, y);
             using (Graphics gfx = Graphics.FromImage(newimage)){
                 gfx.DrawImage(img, 0, 0, x, y);
             }
             return newimage;
         }
-        public static void replace_tpl_image(WAD wadFile, string binContainerName, string tplFileName, string newImagePath){
+        public static void Replace_tpl_image(WAD wadFile, string binContainerName, string tplFileName, string newImagePath){
             U8 binContainer = new U8();
             if (!wadFile.HasBanner)
                 throw new Exception("The base WAD is not a Channel WADs!");
@@ -215,7 +216,7 @@ namespace Virtual_Console_Numbify_fw{
             img = Image.FromFile(newImagePath);
 
             if (img.Width != tplFile.GetTextureSize(0).Width || img.Height != tplFile.GetTextureSize(0).Height)
-                img = resizeImage(img, tplFile.GetTextureSize(0).Width, tplFile.GetTextureSize(0).Height);
+                img = ResizeImage(img, tplFile.GetTextureSize(0).Width, tplFile.GetTextureSize(0).Height);
 
             tplFile.RemoveTexture(0);
             tplFile.AddTexture(img, bannerFormat, pFormat);
@@ -231,14 +232,14 @@ namespace Virtual_Console_Numbify_fw{
         }
 
         public static void clearDirectory(string dir){
-            removeAllDirectoriesFromDirectory(dir);
+            RemoveAllDirectoriesFromDirectory(dir);
             string[] allFiles = Directory.GetFiles(dir);
             foreach (string file in allFiles){
                 File.Delete(file);
             }
         }
 
-        public static void removeAllFilesWithAnSpecificExtensionFromDirectory(string dir, string ext, string[] _exception = null){
+        public static void RemoveAllFilesWithAnSpecificExtensionFromDirectory(string dir, string ext, string[] _exception = null){
             string[] allFiles = Directory.GetFiles(dir);
             if(_exception == null){
                 _exception = new string[] { };
@@ -250,7 +251,17 @@ namespace Virtual_Console_Numbify_fw{
             }
         }
 
-        public static async Task copyAllFilesOnDirectory(string src, string dest, bool sub){
+        public static bool CheckIfDirectoryHasAtLeastOneFileWithAnSpecifiedExtension(string dir, string ext) {
+            string[] allFiles = Directory.GetFiles(dir);
+            foreach (string file in allFiles) {
+                if (Path.GetExtension(file).ToLower() == ext) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static async Task CopyAllFilesOnDirectory(string src, string dest, bool sub){
             string[] allFiles = Directory.GetFiles(src);
             foreach (string file in allFiles){
                 await CopyFileAsync(file, Path.Combine(dest, Path.GetFileName(file)));
@@ -259,23 +270,27 @@ namespace Virtual_Console_Numbify_fw{
             string[] dirr = Directory.GetDirectories(src);
             foreach (string d in dirr){
                 Directory.CreateDirectory(Path.Combine(dest, Path.GetFileName(d)));
-                await copyAllFilesOnDirectory(d, Path.Combine(dest, Path.GetFileName(d)), true);
+                await CopyAllFilesOnDirectory(d, Path.Combine(dest, Path.GetFileName(d)), true);
             }
         }
 
-        public static void removeAllDirectoriesFromDirectory(string dir) {
+        public static void RemoveAllDirectoriesFromDirectory(string dir) {
             string[] dirr = Directory.GetDirectories(dir);
             foreach (string d in dirr){
                 Directory.Delete(d, true);
             }
         }
-        public static void notmalizeLineEnd(string file){
+        public static void NotmalizeLineEnd(string file){
             string[] lines = File.ReadAllLines(file);
             List<string> list_of_string = new List<string>();
             foreach (string line in lines){
                 list_of_string.Add(line.Trim());
             }
             File.WriteAllLines(file, list_of_string);
+        }
+        public static string GetExeDirectory() {
+            string exePath = Helpers.RemoveProtocolFromBase(Assembly.GetExecutingAssembly().GetName().CodeBase);
+            return Path.GetDirectoryName(exePath);
         }
     }
 }

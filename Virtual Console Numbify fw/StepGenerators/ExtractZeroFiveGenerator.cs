@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Virtual_Console_Numbify_fw.StepGenerators{
     internal class ExtractZeroFiveGenerator{
-        public static VirtualConsoleInjectionStep generate(string overrideFile = "00000005"){
+        public static VirtualConsoleInjectionStep Generate(string overrideFile = "00000005"){
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
             toReturn.pauseStartMessage = "Will extract " + overrideFile + ".app";
             toReturn.pauseFinishedMessage = overrideFile + ".app extracted";
@@ -20,24 +20,24 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                     Path.Combine(env.U8tool, "U8Tool.exe"),
                     env.U8tool,
                     new string[] {
-                        "-file", "\""+Path.Combine(new string[]{env.workingExtracted, overrideFile+".app" })+"\"",
-                        "-folder", "\""+Path.Combine(new string[]{ env.workingExtracted, overrideFile+@"_app_OUT\" })+"\"",
-                        "-source", "\""+Path.Combine(new string[]{ env.workingExtracted, overrideFile+".app" })+"\"",
+                        "-file", "\""+Path.Combine(new string[]{env.WorkingExtracted, overrideFile+".app" })+"\"",
+                        "-folder", "\""+Path.Combine(new string[]{ env.WorkingExtracted, overrideFile+@"_app_OUT\" })+"\"",
+                        "-source", "\""+Path.Combine(new string[]{ env.WorkingExtracted, overrideFile+".app" })+"\"",
                         "-extract"
                     },
                     true
                 );
                 if (overrideFile == "00000005"){
-                    env.workingExtracted05 = Path.Combine(
-                        new string[] { env.workingExtracted, overrideFile + @"_app_OUT\" }
+                    env.WorkingExtracted05 = Path.Combine(
+                        new string[] { env.WorkingExtracted, overrideFile + @"_app_OUT\" }
                     );
                 }
             };
             toReturn.errorCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-                Helpers.removeAllDirectoriesFromDirectory(env.autoinjectwadPath);
+                Helpers.RemoveAllDirectoriesFromDirectory(env.AutoinjectwadPath);
             };
             toReturn.preEverythingCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-                Helpers.removeAllDirectoriesFromDirectory(env.autoinjectwadPath);
+                Helpers.RemoveAllDirectoriesFromDirectory(env.AutoinjectwadPath);
             };
             toReturn.processCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
             };

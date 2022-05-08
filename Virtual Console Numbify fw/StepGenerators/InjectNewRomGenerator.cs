@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace Virtual_Console_Numbify_fw.StepGenerators{
     internal class InjectNewRomGenerator{
-        public static VirtualConsoleInjectionStep generate(string romFilePath){
+        public static VirtualConsoleInjectionStep Generate(string romFilePath){
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
             toReturn.pauseStartMessage = "Will inject a rom";
             toReturn.pauseFinishedMessage = "Rom injection finnished";
@@ -55,34 +55,34 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                 com.reportProgress("Copying rom ...", toReturn.milestoneList[0]);
                 if (devilken){
                     await com.showFrontendMessage(
-                        "The title id that you will have to type on terminal will not be used, " +
-                        "it will use your choice on main interface instead", "Alert", RecipeButtonsType.ok
+                        "The title id that you will have to type on the terminal will not be used, " +
+                        "it will use your choice on the main interface instead", "Alert", RecipeButtonsType.ok
                     );
-                    Helpers.clearDirectory(Path.Combine(env.devilkenInjectorPath, "ROMS"));
+                    Helpers.clearDirectory(Path.Combine(env.DevilkenInjectorPath, "ROMS"));
                     if (devilkencopydir){
-                        await Helpers.copyAllFilesOnDirectory(
-                            romFilePath, Path.Combine(env.devilkenInjectorPath, "ROMS"), true
+                        await Helpers.CopyAllFilesOnDirectory(
+                            romFilePath, Path.Combine(env.DevilkenInjectorPath, "ROMS"), true
                         );
                     }else{
                         await Helpers.CopyFileAsync(romFilePath, Path.Combine(new string[]{
-                            env.devilkenInjectorPath, "ROMS", romName
+                            env.DevilkenInjectorPath, "ROMS", romName
                         }));
                     }
                     
                 }else{
-                    try { File.Delete(Path.Combine(env.autoinjectwadPath, romName)); } catch { }
-                    await Helpers.CopyFileAsync(romFilePath, Path.Combine(env.autoinjectwadPath, romName));
+                    try { File.Delete(Path.Combine(env.AutoinjectwadPath, romName)); } catch { }
+                    await Helpers.CopyFileAsync(romFilePath, Path.Combine(env.AutoinjectwadPath, romName));
                 }
                 
                 com.reportProgress("Copying base wad ...", toReturn.milestoneList[1]);
                 if (devilken){
-                    await Helpers.CopyFileAsync(env.workingWad, Path.Combine(env.devilkenInjectorPath, "ww.wad"));
-                    File.Delete(env.workingWad);
-                    env.workingWad = Path.Combine(env.devilkenInjectorPath, "ww.wad");
+                    await Helpers.CopyFileAsync(env.WorkingWad, Path.Combine(env.DevilkenInjectorPath, "ww.wad"));
+                    File.Delete(env.WorkingWad);
+                    env.WorkingWad = Path.Combine(env.DevilkenInjectorPath, "ww.wad");
                     com.reportProgress("Injecting rom ...", toReturn.milestoneList[2]);
                     await Helpers.ExecuteExternalProcess(
-                        Path.Combine(env.devilkenInjectorPath, "VC.exe"),
-                        env.devilkenInjectorPath,
+                        Path.Combine(env.DevilkenInjectorPath, "VC.exe"),
+                        env.DevilkenInjectorPath,
                         new string[]{
                             "ww.wad",
                             "ROMS"
@@ -90,17 +90,17 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                     );
 
                     File.Move(
-                        Path.Combine(env.devilkenInjectorPath, "title.wad"),
-                        Path.Combine(env.autoinjectwadPath, "VC-newinjection in ww.wad")
+                        Path.Combine(env.DevilkenInjectorPath, "title.wad"),
+                        Path.Combine(env.AutoinjectwadPath, "VC-newinjection in ww.wad")
                     );
                 }else{
-                    await Helpers.CopyFileAsync(env.workingWad, Path.Combine(env.autoinjectwadPath, "ww.wad"));
-                    File.Delete(env.workingWad);
-                    env.workingWad = Path.Combine(env.autoinjectwadPath, "ww.wad");
+                    await Helpers.CopyFileAsync(env.WorkingWad, Path.Combine(env.AutoinjectwadPath, "ww.wad"));
+                    File.Delete(env.WorkingWad);
+                    env.WorkingWad = Path.Combine(env.AutoinjectwadPath, "ww.wad");
                     com.reportProgress("Injecting rom ...", toReturn.milestoneList[2]);
                     await Helpers.ExecuteExternalProcess(
-                        Path.Combine(env.autoinjectwadPath, "injectuwad.exe"),
-                        env.autoinjectwadPath,
+                        Path.Combine(env.AutoinjectwadPath, "injectuwad.exe"),
+                        env.AutoinjectwadPath,
                         new string[]{
                             romName,
                             "ww.wad",
@@ -109,27 +109,27 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                             "n"
                         }
                     );
-                    File.Delete(env.workingWad);
+                    File.Delete(env.WorkingWad);
                 }
-                env.workingWad = Path.Combine(env.autoinjectwadPath, "VC-newinjection in ww.wad");
+                env.WorkingWad = Path.Combine(env.AutoinjectwadPath, "VC-newinjection in ww.wad");
             };
             
             toReturn.preEverythingCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-                Helpers.removeAllFilesWithAnSpecificExtensionFromDirectory(env.autoinjectwadPath, ".wad", new string[]{
-                    env.workingWad
+                Helpers.RemoveAllFilesWithAnSpecificExtensionFromDirectory(env.AutoinjectwadPath, ".wad", new string[]{
+                    env.WorkingWad
                 });
-                Helpers.removeAllDirectoriesFromDirectory(env.autoinjectwadPath);
+                Helpers.RemoveAllDirectoriesFromDirectory(env.AutoinjectwadPath);
                 await toReturn.processCleanup(env, com);
             };
 
             toReturn.errorCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-                try { File.Delete(env.workingWad); } catch { };
+                try { File.Delete(env.WorkingWad); } catch { };
                 await toReturn.preEverythingCleanup(env, com);
             };
 
             toReturn.processCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-                Helpers.removeAllFilesWithAnSpecificExtensionFromDirectory(env.autoinjectwadPath, ".app");
-                string[] allFiles = Directory.GetFiles(env.autoinjectwadPath);
+                Helpers.RemoveAllFilesWithAnSpecificExtensionFromDirectory(env.AutoinjectwadPath, ".app");
+                string[] allFiles = Directory.GetFiles(env.AutoinjectwadPath);
                 List<string> toDelete = new List<string>();
                 foreach (string file in allFiles){
                     switch (Path.GetFileName(file).ToLower()){
@@ -157,11 +157,11 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                 foreach (string file in toDelete){
                     File.Delete(file);
                 }
-                Helpers.removeAllDirectoriesFromDirectory(env.devilkenInjectorPath);
-                Helpers.removeAllFilesWithAnSpecificExtensionFromDirectory(env.devilkenInjectorPath, ".wad", new string[]{
-                    env.workingWad
+                Helpers.RemoveAllDirectoriesFromDirectory(env.DevilkenInjectorPath);
+                Helpers.RemoveAllFilesWithAnSpecificExtensionFromDirectory(env.DevilkenInjectorPath, ".wad", new string[]{
+                    env.WorkingWad
                 });
-                Directory.CreateDirectory(Path.Combine(env.devilkenInjectorPath, "ROMS"));
+                Directory.CreateDirectory(Path.Combine(env.DevilkenInjectorPath, "ROMS"));
             };
             return toReturn;
         }

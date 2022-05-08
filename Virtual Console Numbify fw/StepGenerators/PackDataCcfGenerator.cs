@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Virtual_Console_Numbify_fw.StepGenerators{
     internal class PackDataCcfGenerator{
-        public static VirtualConsoleInjectionStep generate(bool manualInject, int inceptionLevel){
+        public static VirtualConsoleInjectionStep Generate(bool manualInject, int inceptionLevel){
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
             if (inceptionLevel == 0){
                 toReturn.pauseStartMessage = "Will pack data.ccf";
@@ -22,13 +22,13 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                 new object()
             };
             toReturn.process = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-                string ccfFile = Path.Combine(new string[] { env.workingExtracted05, "data.ccf" });
-                string outDir = Path.Combine(new string[] { env.workingExtracted05, @"data_ccf_OUT\" });
+                string ccfFile = Path.Combine(new string[] { env.WorkingExtracted05, "data.ccf" });
+                string outDir = Path.Combine(new string[] { env.WorkingExtracted05, @"data_ccf_OUT\" });
                 string verificationText = ccfFile + @" successfully extracted!";
                 if (inceptionLevel == 1){
                     com.reportProgress("Extracting misc.ccf.zlib ...", toReturn.milestoneList[0]);
-                    ccfFile = Path.Combine(new string[] { env.workingExtractedCcf, "misc.ccf.zlib" });
-                    outDir = Path.Combine(new string[] { env.workingExtractedCcf, @"misc_ccf_zlib_OUT\" });
+                    ccfFile = Path.Combine(new string[] { env.WorkingExtractedCcf, "misc.ccf.zlib" });
+                    outDir = Path.Combine(new string[] { env.WorkingExtractedCcf, @"misc_ccf_zlib_OUT\" });
                     await com.showFrontendMessage(
                         "Now, it's time to extract misc.ccf.zlib\n" +
                         "\n" +
@@ -44,8 +44,8 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                 AutoItX3 saveIconEditor = new AutoItX3();
                 saveIconEditor.AutoItSetOption("MouseCoordMode", 2);
                 int pid = saveIconEditor.Run(
-                    Path.Combine(env.ccftool, "CCF_tool.exe"),
-                    env.ccftool
+                    Path.Combine(env.Ccftool, "CCF_tool.exe"),
+                    env.Ccftool
                 ); ;
 
                 saveIconEditor.WinWaitActive("[CLASS:ThunderRT6FormDC]");
@@ -91,14 +91,14 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                     }
                 }else{
                     bool cok = await com.showFrontendMessage(
-                        "A new window have appeared, it may be behind Virtual Console Numbify\n" +
-                        "Only click yes or no on this dialog after this steps\n" +
+                        "A new window has appeared, it may be behind Virtual Console Numbify\n" +
+                        "Only click yes or no on this dialog after these steps\n" +
                         "1. Be sure that Path to file is set to \"" + ccfFile + "\"\n" +
                         "2. Be sure that Path to folder is set to \"" + outDir + "\"\n" +
                         "3. Click extract\n" +
                         "4. Close the ccf tool window\n" +
                         "\n" +
-                        "Was everythong ok with CCF tool ?", "CCF Tool", RecipeButtonsType.yesno
+                        "Was everything ok with CCF tool ?", "CCF Tool", RecipeButtonsType.yesno
                     );
                     if (cok == false){
                         throw new Exception("User reported that something bad happened :-(");
@@ -106,16 +106,16 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                 }
 
                 if (inceptionLevel == 1){
-                    env.workingExtractedCcf2 = outDir;
+                    env.WorkingExtractedCcf2 = outDir;
                 }else{
-                    env.workingExtractedCcf = outDir;
+                    env.WorkingExtractedCcf = outDir;
                 }
             };
             toReturn.errorCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-                Helpers.removeAllDirectoriesFromDirectory(env.autoinjectwadPath);
+                Helpers.RemoveAllDirectoriesFromDirectory(env.AutoinjectwadPath);
             };
             toReturn.preEverythingCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-                Helpers.removeAllDirectoriesFromDirectory(env.autoinjectwadPath);
+                Helpers.RemoveAllDirectoriesFromDirectory(env.AutoinjectwadPath);
             };
             toReturn.processCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
             };

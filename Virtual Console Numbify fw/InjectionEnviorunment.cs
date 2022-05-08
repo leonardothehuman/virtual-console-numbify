@@ -7,54 +7,55 @@ using System.IO;
 
 namespace Virtual_Console_Numbify_fw{
     internal class InjectionEnviorunment{
-        public string externalToolsBasePath;
-        public string workingWad;
-        public string workingExtracted;
-        public string workingExtracted05;
-        public string workingExtractedCcf;
-        public string workingExtractedCcf2;
-        public string workingNeoGeoBannerContainer = "";
-        public string extractedTitleId;
-        public string finalWadFile;
+        public string ExternalToolsBasePath = Path.Combine(Helpers.GetExeDirectory(), "externalTools");
+        //enviorunment.ExternalToolsBasePath = @"C:\Users\Leonardo\Desktop";
+        public string WorkingWad;
+        public string WorkingExtracted;
+        public string WorkingExtracted05;
+        public string WorkingExtractedCcf;
+        public string WorkingExtractedCcf2;
+        public string WorkingNeoGeoBannerContainer = "";
+        public string ExtractedTitleId;
+        public string FinalWadFile;
         public Console console;
-        public string autoinjectwadPath {
+        public string AutoinjectwadPath {
             get{
-                return Path.Combine(externalToolsBasePath, "autoinjectwad");
+                return Path.Combine(ExternalToolsBasePath, "autoinjectwad");
             }
         }
-        public string devilkenInjectorPath{
+        public string DevilkenInjectorPath{
             get{
-                return Path.Combine(externalToolsBasePath, "VC");
+                return Path.Combine(ExternalToolsBasePath, "VC");
             }
         }
         public string VCbrlytPath{
             get{
-                return Path.Combine(externalToolsBasePath, @"HowardC_Tools\VCbrlyt9.0");
+                return Path.Combine(ExternalToolsBasePath, @"HowardC_Tools\VCbrlyt9.0");
             }
         }
         public string VCiconPath{
             get{
-                return Path.Combine(externalToolsBasePath, @"HowardC_Tools\VCIcon8.0");
+                return Path.Combine(ExternalToolsBasePath, @"HowardC_Tools\VCIcon8.0");
             }
         }
         public string VCsaveInjectPath{
             get{
-                return Path.Combine(externalToolsBasePath, @"HowardC_Tools\VCSaveInject5.0");
+                return Path.Combine(ExternalToolsBasePath, @"HowardC_Tools\VCSaveInject5.0");
             }
         }
         public string U8tool{
             get{
-                return Path.Combine(externalToolsBasePath, @"HowardC_Tools\u8tool10.1");
+                return Path.Combine(ExternalToolsBasePath, @"HowardC_Tools\u8tool10.1");
             }
         }
-        public string ccftool{
+        public string Ccftool{
             get{
-                return Path.Combine(externalToolsBasePath, @"HowardC_Tools\ccftool2.0");
+                return Path.Combine(ExternalToolsBasePath, @"HowardC_Tools\ccftool2.0");
             }
         }
-        public string zeroFourApp{
+        public string ZeroFourApp{
             get{
-                return Path.Combine(externalToolsBasePath, @"00000004.app");
+                return Path.Combine(ExternalToolsBasePath, @"00000004.app");
             }
         }
     }

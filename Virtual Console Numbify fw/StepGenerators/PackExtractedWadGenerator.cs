@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace Virtual_Console_Numbify_fw.StepGenerators{
     internal class PackExtractedWadGenerator{
-        public static VirtualConsoleInjectionStep generate(){
+        public static VirtualConsoleInjectionStep Generate(){
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
             toReturn.pauseStartMessage = "Will pack a wad file";
             toReturn.pauseFinishedMessage = "Wad packing finnished";
@@ -17,20 +17,20 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
             };
             toReturn.process = async (InjectionEnviorunment env, MainWindowComunicator com) => {
                 await Helpers.CopyFileAsync(
-                    Path.Combine(env.autoinjectwadPath, "common-key.bin"),
+                    Path.Combine(env.AutoinjectwadPath, "common-key.bin"),
                     Path.Combine(new string[]{
-                        env.workingExtracted, "common-key.bin"
+                        env.WorkingExtracted, "common-key.bin"
                     })
                 );
 
                 com.reportProgress("Packing wad ...", toReturn.milestoneList[0]);
                 await Helpers.ExecuteExternalProcess(
-                    Path.Combine(env.autoinjectwadPath, "wadpacker.exe"),
-                    Path.Combine(env.workingExtracted),
+                    Path.Combine(env.AutoinjectwadPath, "wadpacker.exe"),
+                    Path.Combine(env.WorkingExtracted),
                     new string[] {
-                        env.extractedTitleId+".tik",
-                        env.extractedTitleId+".tmd",
-                        env.extractedTitleId+".cert",
+                        env.ExtractedTitleId+".tik",
+                        env.ExtractedTitleId+".tmd",
+                        env.ExtractedTitleId+".cert",
                         "out.wad",
                         "-sign"
                     }, false, 10
@@ -39,22 +39,22 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
 
                 await Helpers.CopyFileAsync(
                     Path.Combine(new string[]{
-                        env.workingExtracted, "out.wad"
+                        env.WorkingExtracted, "out.wad"
                     }),
                     Path.Combine(new string[]{
-                        env.autoinjectwadPath, env.finalWadFile
+                        env.AutoinjectwadPath, env.FinalWadFile
                     })
                 );
             };
 
             toReturn.errorCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-                Helpers.removeAllDirectoriesFromDirectory(env.autoinjectwadPath);
+                Helpers.RemoveAllDirectoriesFromDirectory(env.AutoinjectwadPath);
             };
             toReturn.preEverythingCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-                Helpers.removeAllDirectoriesFromDirectory(env.autoinjectwadPath);
+                Helpers.RemoveAllDirectoriesFromDirectory(env.AutoinjectwadPath);
             };
             toReturn.processCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-                Directory.Delete(env.workingExtracted, true);
+                Directory.Delete(env.WorkingExtracted, true);
             };
             return toReturn;
         }

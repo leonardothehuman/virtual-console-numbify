@@ -62,6 +62,14 @@ namespace Virtual_Console_Numbify_fw
                     }
                 }
                 return "";
+            }, async (string f, string t) => {
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                saveFileDialog1.Filter = "WiiWare file (*.wad)|*.wad|All files (*.*)|*.*";
+                saveFileDialog1.Title = "Where to save the injected file ...";
+                if (saveFileDialog1.ShowDialog() != true) {
+                    return "";
+                }
+                return saveFileDialog1.FileName;
             });
             this.DataContext = mainWindowModel;
             consoleSelect.ItemsSource = mainWindowModel.virtualConsoleOptionsManager.supportedConsoles;

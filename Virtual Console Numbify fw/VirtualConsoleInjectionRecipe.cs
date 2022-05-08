@@ -43,17 +43,17 @@ namespace Virtual_Console_Numbify_fw{
             comunicator.showFrontendMessage = async (string message, string title, RecipeButtonsType type) => { return false; };
             milestoneList = new List<object>();
         }
-        public void setFrontendMessageDelegate(MainWindowComunicator.ShowFrontendMessage del){
+        public void SetFrontendMessageDelegate(MainWindowComunicator.ShowFrontendMessage del){
             comunicator.showFrontendMessage = del;
         }
-        public void addStep(VirtualConsoleInjectionStep toAdd)
+        public void AddStep(VirtualConsoleInjectionStep toAdd)
         {
             steps.Add(toAdd);
             foreach (var item in toAdd.milestoneList){
                 milestoneList.Add(item);
             }
         }
-        public async Task executeSteps(){
+        public async Task ExecuteSteps(){
             foreach (VirtualConsoleInjectionStep step in steps){
                 await step.preEverythingCleanup(injectionEnviorunment, comunicator);
             }

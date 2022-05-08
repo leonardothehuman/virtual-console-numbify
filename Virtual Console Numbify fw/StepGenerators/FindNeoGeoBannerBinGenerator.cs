@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Virtual_Console_Numbify_fw.StepGenerators{
     internal class FindNeoGeoBannerBinGenerator{
-        public static VirtualConsoleInjectionStep generate(){
-            VirtualConsoleInjectionStep extractZeroSix = ExtractZeroFiveGenerator.generate("00000006");
+        public static VirtualConsoleInjectionStep Generate(){
+            VirtualConsoleInjectionStep extractZeroSix = ExtractZeroFiveGenerator.Generate("00000006");
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
             toReturn.pauseStartMessage = "Will find neogeo's banner.bin";
             toReturn.pauseFinishedMessage = "banner.bin search finished";
@@ -16,28 +16,28 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
             toReturn.process = async (InjectionEnviorunment env, MainWindowComunicator com) => {
                 if (File.Exists(
                     Path.Combine(
-                        env.workingExtracted05,
+                        env.WorkingExtracted05,
                         "banner.bin"
                     )
                 )){
-                    env.workingNeoGeoBannerContainer = env.workingExtracted05;
+                    env.WorkingNeoGeoBannerContainer = env.WorkingExtracted05;
                     return;
                 }
                 await extractZeroSix.process(env, com);
-                env.workingNeoGeoBannerContainer = Path.Combine(
-                    new string[] { env.workingExtracted, @"00000006_app_OUT\" }
+                env.WorkingNeoGeoBannerContainer = Path.Combine(
+                    new string[] { env.WorkingExtracted, @"00000006_app_OUT\" }
                 );
                 if (File.Exists(
                     Path.Combine(
-                        env.workingNeoGeoBannerContainer,
+                        env.WorkingNeoGeoBannerContainer,
                         "banner.bin"
                     )
                 )){
                     return;
                 }
                 //await com.showFrontendMessage("Will delete 6", "6", RecipeButtonsType.ok);
-                Directory.Delete(Path.Combine(new string[] { env.workingExtracted, @"00000006_app_OUT\" }), true);
-                env.workingNeoGeoBannerContainer = "";
+                Directory.Delete(Path.Combine(new string[] { env.WorkingExtracted, @"00000006_app_OUT\" }), true);
+                env.WorkingNeoGeoBannerContainer = "";
             };
             toReturn.errorCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
                 await extractZeroSix.errorCleanup(env, com);

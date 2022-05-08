@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace Virtual_Console_Numbify_fw.StepGenerators{
     internal class ReplaceIconFromExtracted{
-        public static VirtualConsoleInjectionStep generate(string iconFilePath, string saveName, bool manualInject, bool disableAlert){
+        public static VirtualConsoleInjectionStep Generate(string iconFilePath, string saveName, bool manualInject, bool disableAlert){
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
             toReturn.pauseStartMessage = "Will replace icon";
             toReturn.pauseFinishedMessage = "Icon replaced";
@@ -18,8 +18,8 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                 new object()
             };
             toReturn.process = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-                string tplFile = Path.Combine(Path.Combine(env.autoinjectwadPath, @"icons\banner.tpl"));
-                string appFile = Path.Combine(new string[]{env.workingExtracted, "00000001.app"});
+                string tplFile = Path.Combine(Path.Combine(env.AutoinjectwadPath, @"icons\banner.tpl"));
+                string appFile = Path.Combine(new string[]{env.WorkingExtracted, "00000001.app"});
                 com.reportProgress("Generating save icons animations ...", toReturn.milestoneList[0]);
                 string consoleCode = "";
                 string dropdownString = "";
@@ -37,62 +37,62 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                     case Console.SNES:
                         consoleCode = "snes";
                         dropdownString = "SNES /SFC";
-                        verificationText1 = @"Tpl File:  " + tplFile + @" successfully copied to " + env.workingExtracted05 + @"banner.tpl.";
+                        verificationText1 = @"Tpl File:  " + tplFile + @" successfully copied to " + env.WorkingExtracted05 + @"banner.tpl.";
                         verificationText2 = saveName + @" successflly injected into " + appFile;
                     break;
                     case Console.N64:
                         consoleCode = "n64";
                         dropdownString = "N64";
-                        tplFile = Path.Combine(Path.Combine(env.autoinjectwadPath, @"icons\save_banner.tpl"));
+                        tplFile = Path.Combine(Path.Combine(env.AutoinjectwadPath, @"icons\save_banner.tpl"));
                         //appFile = Path.Combine(new string[] { env.workingExtracted, @"00000005_app_out" })+"\\";
-                        appFile = env.workingExtracted05;
+                        appFile = env.WorkingExtracted05;
                         verificationText1 = @"Tpl File:  " + tplFile + @" successfully injected into save_banner.tpl.";
                         verificationText2 = @"N64 titles successfully Injected!";
                     break;
                     case Console.SMD:
                         consoleCode = "smd";
                         dropdownString = "Genesis/ Mega Drive";
-                        tplFile = Path.Combine(Path.Combine(env.autoinjectwadPath, @"icons")) + "\\";
-                        appFile = Path.Combine(new string[] { env.workingExtractedCcf2, @"banner.cfg.txt" });
-                        Helpers.notmalizeLineEnd(Path.Combine(env.workingExtractedCcf2, "banner.cfg.txt"));
-                        verificationText0 = env.workingExtractedCcf2;
+                        tplFile = Path.Combine(Path.Combine(env.AutoinjectwadPath, @"icons")) + "\\";
+                        appFile = Path.Combine(new string[] { env.WorkingExtractedCcf2, @"banner.cfg.txt" });
+                        Helpers.NotmalizeLineEnd(Path.Combine(env.WorkingExtractedCcf2, "banner.cfg.txt"));
+                        verificationText0 = env.WorkingExtractedCcf2;
                         verificationText1 = @"WTE Files Successfully Copied!";
                         verificationText2 = @"Titles Successfully Injected into "+ appFile + @"!";
                     break;
                     case Console.SMS:
                         consoleCode = "sms";
                         dropdownString = "Master System";
-                        tplFile = Path.Combine(Path.Combine(env.autoinjectwadPath, @"icons")) + "\\";
-                        appFile = Path.Combine(new string[] { env.workingExtractedCcf2, @"banner.cfg.txt" });
-                        Helpers.notmalizeLineEnd(Path.Combine(env.workingExtractedCcf2, "banner.cfg.txt"));
-                        verificationText0 = env.workingExtractedCcf2;
+                        tplFile = Path.Combine(Path.Combine(env.AutoinjectwadPath, @"icons")) + "\\";
+                        appFile = Path.Combine(new string[] { env.WorkingExtractedCcf2, @"banner.cfg.txt" });
+                        Helpers.NotmalizeLineEnd(Path.Combine(env.WorkingExtractedCcf2, "banner.cfg.txt"));
+                        verificationText0 = env.WorkingExtractedCcf2;
                         verificationText1 = @"WTE Files Successfully Copied!";
                         verificationText2 = @"Titles Successfully Injected into " + appFile + @"!";
                     break;
                     case Console.PCE:
                         consoleCode = "pce";
                         dropdownString = "Tg-16 / PCE";
-                        appFile = Path.Combine(new string[] { env.workingExtracted05, @"TITLE.TXT" });
+                        appFile = Path.Combine(new string[] { env.WorkingExtracted05, @"TITLE.TXT" });
                         //Helpers.notmalizeLineEnd(Path.Combine(new string[] { env.workingExtracted05, @"TITLE.TXT" }));
-                        verificationText1 = tplFile + @" successfully copied to " + env.workingExtracted05 + @"savedata.tpl!";
+                        verificationText1 = tplFile + @" successfully copied to " + env.WorkingExtracted05 + @"savedata.tpl!";
                         verificationText2 = @"Titles Successfully Injected into " + appFile + @"!";
                     break;
                     case Console.NGAES:
                         consoleCode = "neogeo";
                         dropdownString = "NeoGeo";
-                        appFile = Path.Combine(new string[] { env.workingExtracted, @"00000006_app_out" }) + "\\";
+                        appFile = Path.Combine(new string[] { env.WorkingExtracted, @"00000006_app_out" }) + "\\";
                         break;
                     default:
                         throw new NotImplementedException("The selected console is not supported yet ...");
                 }
-                Directory.CreateDirectory(Path.Combine(env.autoinjectwadPath, "icons"));
+                Directory.CreateDirectory(Path.Combine(env.AutoinjectwadPath, "icons"));
                 await Helpers.ExecuteExternalProcess(
                     Path.Combine(env.VCiconPath, "VC_Icon_Gen.exe"),
                     env.VCiconPath,
                     new string[] {
                         "-sys", consoleCode,
                         "-s", "\""+iconFilePath+"\"",
-                        "-d", "\""+Path.Combine(env.autoinjectwadPath, @"icons\")+"\"",
+                        "-d", "\""+Path.Combine(env.AutoinjectwadPath, @"icons\")+"\"",
                         "-m", "s"
                     },
                     true
@@ -214,8 +214,8 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                 else
                 {
                     bool cok = await com.showFrontendMessage(
-                        "A new window have appeared, it may be behind Virtual Console Numbify\n" +
-                        "Only click yes or no on this dialog after this steps\n" +
+                        "A new window has appeared, it may be behind Virtual Console Numbify\n" +
+                        "Only click yes or no on this dialog after these steps\n" +
                         "1. Be sure that the correct console is selected\n" +
                         "2. Be sure that save title is set to \"" + saveName + "\" and click Set All\n" +
                         "3. Be sure that source tpl is set to \"" + tplFile + "\"\n" +
@@ -224,7 +224,7 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                         "6. Be sure that we had no errors while injecting\n" +
                         "7. Close the icon injector window\n" +
                         "\n" +
-                        "Was everythong ok with icon injector ?", "Save icon", RecipeButtonsType.yesno
+                        "Was everything ok with icon injector ?", "Save icon", RecipeButtonsType.yesno
                     );
                     if(cok == false)
                     {
@@ -233,15 +233,15 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                 }
             };
             toReturn.errorCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-                Helpers.removeAllFilesWithAnSpecificExtensionFromDirectory(env.VCiconPath, ".tga");
-                Helpers.removeAllDirectoriesFromDirectory(env.autoinjectwadPath);
+                Helpers.RemoveAllFilesWithAnSpecificExtensionFromDirectory(env.VCiconPath, ".tga");
+                Helpers.RemoveAllDirectoriesFromDirectory(env.AutoinjectwadPath);
             };
             toReturn.preEverythingCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-                Helpers.removeAllFilesWithAnSpecificExtensionFromDirectory(env.VCiconPath, ".tga");
-                Helpers.removeAllDirectoriesFromDirectory(env.autoinjectwadPath);
+                Helpers.RemoveAllFilesWithAnSpecificExtensionFromDirectory(env.VCiconPath, ".tga");
+                Helpers.RemoveAllDirectoriesFromDirectory(env.AutoinjectwadPath);
             };
             toReturn.processCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-                Directory.Delete(Path.Combine(env.autoinjectwadPath, @"icons"), true);
+                Directory.Delete(Path.Combine(env.AutoinjectwadPath, @"icons"), true);
             };
             return toReturn;
         }

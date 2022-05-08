@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Virtual_Console_Numbify_fw.StepGenerators
 {
     internal class CustomizeGeneratedWadGenerator{
-        public static VirtualConsoleInjectionStep generate(
+        public static VirtualConsoleInjectionStep Generate(
             string wadTitleName,
             string wadTitleId,
             bool useCompression,
@@ -36,19 +36,19 @@ namespace Virtual_Console_Numbify_fw.StepGenerators
             toReturn.process = async (InjectionEnviorunment env, MainWindowComunicator com) => {
                 WAD w = new WAD();
                 com.reportProgress("Loading wad with injected rom ...", toReturn.milestoneList[0]);
-                w.LoadFile(env.workingWad);
+                w.LoadFile(env.WorkingWad);
 
                 com.reportProgress("Replacing banner image ...", toReturn.milestoneList[1]);
-                Helpers.replace_tpl_image(w, "banner.bin", "vcpic.tpl", bannerImageFilePath);
+                Helpers.Replace_tpl_image(w, "banner.bin", "vcpic.tpl", bannerImageFilePath);
 
                 com.reportProgress("Replacing icon ...", toReturn.milestoneList[2]);
-                Helpers.replace_tpl_image(w, "icon.bin", "iconvcpic.tpl", iconFilePath);
+                Helpers.Replace_tpl_image(w, "icon.bin", "iconvcpic.tpl", iconFilePath);
 
                 com.reportProgress("Extracting banner.brlyt ...", toReturn.milestoneList[3]);
-                Helpers.extractBannerBrlyt(w, Path.Combine(env.autoinjectwadPath, "banner.brlyt"));
+                Helpers.ExtractBannerBrlyt(w, Path.Combine(env.AutoinjectwadPath, "banner.brlyt"));
 
                 await Helpers.CopyFileAsync(
-                    Path.Combine(env.autoinjectwadPath, "banner.brlyt"),
+                    Path.Combine(env.AutoinjectwadPath, "banner.brlyt"),
                     Path.Combine(env.VCbrlytPath, "banner.brlyt")
                 );
 
@@ -65,7 +65,7 @@ namespace Virtual_Console_Numbify_fw.StepGenerators
                 );
 
                 com.reportProgress("Replacing banner ...", toReturn.milestoneList[5]);
-                Helpers.replaceBannerBrlyt(w, Path.Combine(env.VCbrlytPath, "banner.brlyt"));
+                Helpers.ReplaceBannerBrlyt(w, Path.Combine(env.VCbrlytPath, "banner.brlyt"));
                 w.ChangeChannelTitles(new string[]{
                     wadTitleName,wadTitleName,wadTitleName,wadTitleName,
                     wadTitleName,wadTitleName,wadTitleName,wadTitleName
@@ -89,25 +89,25 @@ namespace Virtual_Console_Numbify_fw.StepGenerators
                 w.Lz77DecompressBannerAndIcon = !useCompression;
 
                 com.reportProgress("Saving wad ...", toReturn.milestoneList[7]);
-                w.Save(Path.Combine(env.autoinjectwadPath, "bannerReplaced.wad"));
+                w.Save(Path.Combine(env.AutoinjectwadPath, "bannerReplaced.wad"));
                 w.Dispose();
-                File.Delete(env.workingWad);
-                env.workingWad = Path.Combine(env.autoinjectwadPath, "bannerReplaced.wad");
+                File.Delete(env.WorkingWad);
+                env.WorkingWad = Path.Combine(env.AutoinjectwadPath, "bannerReplaced.wad");
             };
             toReturn.errorCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-                try { File.Delete(env.workingWad); } catch { };
+                try { File.Delete(env.WorkingWad); } catch { };
                 await toReturn.preEverythingCleanup(env, com);
             };
             toReturn.preEverythingCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) =>{
-                Helpers.removeAllFilesWithAnSpecificExtensionFromDirectory(env.autoinjectwadPath, ".wad", new string[]{
-                    env.workingWad
+                Helpers.RemoveAllFilesWithAnSpecificExtensionFromDirectory(env.AutoinjectwadPath, ".wad", new string[]{
+                    env.WorkingWad
                 });
-                Helpers.removeAllFilesWithAnSpecificExtensionFromDirectory(env.autoinjectwadPath, ".brlyt");
-                Helpers.removeAllFilesWithAnSpecificExtensionFromDirectory(env.VCbrlytPath, ".brlyt");
-                Helpers.removeAllDirectoriesFromDirectory(env.autoinjectwadPath);
+                Helpers.RemoveAllFilesWithAnSpecificExtensionFromDirectory(env.AutoinjectwadPath, ".brlyt");
+                Helpers.RemoveAllFilesWithAnSpecificExtensionFromDirectory(env.VCbrlytPath, ".brlyt");
+                Helpers.RemoveAllDirectoriesFromDirectory(env.AutoinjectwadPath);
             };
             toReturn.processCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-                File.Delete(Path.Combine(env.autoinjectwadPath, "banner.brlyt"));
+                File.Delete(Path.Combine(env.AutoinjectwadPath, "banner.brlyt"));
                 File.Delete(Path.Combine(env.VCbrlytPath, "banner.brlyt"));
             };
             return toReturn;

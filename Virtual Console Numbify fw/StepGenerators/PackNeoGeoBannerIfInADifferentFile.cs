@@ -7,21 +7,21 @@ using System.Threading.Tasks;
 
 namespace Virtual_Console_Numbify_fw.StepGenerators{
     internal class PackNeoGeoBannerIfInADifferentFile{
-        public static VirtualConsoleInjectionStep generate(){
-            VirtualConsoleInjectionStep packZeroSix = PackZeroFiveGenerator.generate("00000006");
+        public static VirtualConsoleInjectionStep Generate(){
+            VirtualConsoleInjectionStep packZeroSix = PackZeroFiveGenerator.Generate("00000006");
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
             toReturn.pauseStartMessage = "Will pack 00000006.app";
             toReturn.pauseFinishedMessage = "00000006.app packing finnished";
             bool needsCleanUp = false;
             toReturn.milestoneList = packZeroSix.milestoneList;
             toReturn.process = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-                if (env.workingNeoGeoBannerContainer == "") return;
-                if (env.workingNeoGeoBannerContainer == env.workingExtracted05){
-                    env.workingNeoGeoBannerContainer = "";
+                if (env.WorkingNeoGeoBannerContainer == "") return;
+                if (env.WorkingNeoGeoBannerContainer == env.WorkingExtracted05){
+                    env.WorkingNeoGeoBannerContainer = "";
                     return;
                 }
                 await packZeroSix.process(env, com);
-                env.workingNeoGeoBannerContainer = "";
+                env.WorkingNeoGeoBannerContainer = "";
                 needsCleanUp = true;
             };
             toReturn.errorCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
@@ -31,7 +31,7 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                 await packZeroSix.preEverythingCleanup(env, com);
             };
             toReturn.processCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-                env.workingNeoGeoBannerContainer = "";
+                env.WorkingNeoGeoBannerContainer = "";
                 if (needsCleanUp == false) return;
                 await packZeroSix.processCleanup(env, com);
             };

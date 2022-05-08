@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace Virtual_Console_Numbify_fw.StepGenerators{
     internal class ReplaceSMSRom{
-        public static VirtualConsoleInjectionStep generate(string romFilePath){
+        public static VirtualConsoleInjectionStep Generate(string romFilePath){
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
             toReturn.pauseStartMessage = "Will inject master system rom";
-            toReturn.pauseFinishedMessage = "Master system rom injection finnished";
+            toReturn.pauseFinishedMessage = "Master system rom injection finished";
             toReturn.milestoneList = new object[]{
                 new object()
             };
             toReturn.process = async (InjectionEnviorunment env, MainWindowComunicator com) => {
                 com.reportProgress("Injecting SMS rom ...", toReturn.milestoneList[0]);
-                string[] allFiles = Directory.GetFiles(env.workingExtractedCcf);
+                string[] allFiles = Directory.GetFiles(env.WorkingExtractedCcf);
                 foreach (string file in allFiles){
                     if (file.ToLower().EndsWith(".sms.zlib")){
                         File.Delete(file);

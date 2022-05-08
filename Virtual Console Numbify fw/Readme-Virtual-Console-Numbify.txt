@@ -1,18 +1,17 @@
-# Virtual Console Numbify
-An automated tool to create Wii virtualconsole injections
+﻿Virtual Console Numbify: An automated tool to create Wii virtualconsole injections
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 This is an automation tool that uses several third part tools to automatically replace
 Rom files on Nintendo Wii's virtual console's Wad files, allowing you to create your own
 Injects.
 
-## License
-
+License:
+-=-=-=-=-
 Virtual Console Numbify is released under the terms of the GNU General Public License v3.
-
 See "GNU-Gpl-3.0.txt" for more information.
 
-## Prerequisites
-
+Prerequisites:
+-=-=-=-=-=-=-=
 ActiveX Control Pad: Needed by HowardCtools
 Download -> http://download.microsoft.com/download/activexcontrolpad/install/4.0.0.950/win98mexp/en-us/setuppad.exe
 
@@ -30,41 +29,23 @@ Net framework 4.8: Needed by Virtual Console Numbify itself, Comes preinstalled 
 for older versions, it can be downloaded at
 https://support.microsoft.com/pt-br/topic/instalador-offline-do-microsoft-net-framework-4-8-para-windows-9d23f658-3b97-68ab-d013-aa3c3e7495e0
 
-## Usage
-
+Usage:
+-=-=-=
 Just fill all the fields and follow your heart...
 
-## Planned features
-[ ] - Flash support
-
-[ ] - PC engine CD support
-
-[ ] - Commodore 64 support
-
-[ ] - MSX support
-
-## Credits
-
+Credits:
+-=-=-=-=
 I only could build this tool, because I was standing on the shoulder of giants, Thanks for all those wondertful people for creating
 the tools that Virtual Console Numbify uses:
 
-
 libwiisharp - leathl
-
 wadunpacker.exe - by BFGR
-
 wadtool.exe - by Calantra and DDF 
-
 bannertool.exe - by Calantra
-
 wadpacker.exe - by KiKe
-
 sha1 - unknown author
-
 everything else from autoinjectwad - Creffca (AKA Avicr)
-
 Devilken's vistual console injector - DevilKen
-
 HowardC_Tools - HowardC
 
 The steps used by Virtual Console Numbify was mostly based on this tutorial:
