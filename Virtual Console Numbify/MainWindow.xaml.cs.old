@@ -1,0 +1,253 @@
+﻿using libWiiSharp;
+using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace Virtual_Console_Numbify
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        private VirtualConsoleOptionsManager virtualConsoleOptionsManager = new();
+
+        private delegate Task runAsync();
+        public MainWindow(){
+            DataContext = this;
+            InitializeComponent();
+            consoleSelect.ItemsSource = virtualConsoleOptionsManager.supportedConsoles;
+        }
+
+        private System.Drawing.Image resizeImage(System.Drawing.Image img, int x, int y)
+        {
+            System.Drawing.Image newimage = new Bitmap(x, y);
+            using (Graphics gfx = Graphics.FromImage(newimage)){
+                gfx.DrawImage(img, 0, 0, x, y);
+            }
+            return newimage;
+        }
+
+        public static async Task CopyFileAsync(string sourceFile, string destinationFile){
+            using (var sourceStream = new FileStream(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.Asynchronous | FileOptions.SequentialScan))
+            using (var destinationStream = new FileStream(destinationFile, FileMode.CreateNew, FileAccess.Write, FileShare.None, 4096, FileOptions.Asynchronous | FileOptions.SequentialScan))
+                await sourceStream.CopyToAsync(destinationStream);
+        }
+
+        private void consoleSelect_SelectionChanged(object sender, SelectionChangedEventArgs e){
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e){
+            OpenFileDialog openFileDialog = new();
+            openFileDialog.Filter = "WiiWare file (*.wad)|*.wad|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+                wadFile.Text = openFileDialog.FileName;
+        }
+        private void Button_Click_2(object sender, RoutedEventArgs e){
+            OpenFileDialog openFileDialog = new();
+            openFileDialog.Filter = "WiiWare file (*.wad)|*.wad|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+                romFile.Text = openFileDialog.FileName;
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e){
+            OpenFileDialog openFileDialog = new();
+            openFileDialog.Filter = "Jpeg File (*.jpg)|*.wad|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+                bannerImageFile.Text = openFileDialog.FileName;
+        }
+
+        private void replace_tpl_image(WAD wadFile, string binContainerName, string tplFileName){
+            U8 binContainer = new();
+            if (!wadFile.HasBanner)
+                throw new Exception("CustomizeMii only edits Channel WADs!");
+
+            for (int i = 0; i < wadFile.BannerApp.NumOfNodes; i++){
+                if (wadFile.BannerApp.StringTable[i].ToLower() == binContainerName){
+                    binContainer.LoadFile(wadFile.BannerApp.Data[i]);
+                }
+            }
+
+            List<string> bannerTpls = new List<string>();
+            TPL_TextureFormat bannerFormat = TPL_TextureFormat.CI8;
+            TPL_PaletteFormat pFormat = TPL_PaletteFormat.RGB5A3;
+            string casedTplFileName = "";
+            for (int i = 0; i < binContainer.NumOfNodes; i++){
+                if (binContainer.StringTable[i].ToLower().EndsWith(".tpl")){
+                    try{
+                        TPL tmpTpl = TPL.Load(binContainer.Data[i]);
+
+                        string formatString = tmpTpl.GetTextureFormat(0).ToString();
+                        if (formatString.StartsWith("CI")) formatString += "+" + tmpTpl.GetPaletteFormat(0);
+
+                        if (binContainer.StringTable[i].ToLower() == tplFileName){
+                            bannerFormat = tmpTpl.GetTextureFormat(0);
+                            pFormat = tmpTpl.GetPaletteFormat(0);
+                            casedTplFileName = binContainer.StringTable[i];
+                        }
+
+                        bannerTpls.Add(binContainer.StringTable[i]);
+                    }
+                    catch { }
+                }
+            }
+
+            TPL tplFile;
+            System.Drawing.Image img;
+
+            tplFile = TPL.Load(binContainer.Data[binContainer.GetNodeIndex(casedTplFileName)]);
+
+            img = System.Drawing.Image.FromFile(bannerImageFile.Text);
+
+            if (img.Width != tplFile.GetTextureSize(0).Width || img.Height != tplFile.GetTextureSize(0).Height)
+                img = resizeImage(img, tplFile.GetTextureSize(0).Width, tplFile.GetTextureSize(0).Height);
+
+            tplFile.RemoveTexture(0);
+            tplFile.AddTexture(img, bannerFormat, pFormat);
+
+            binContainer.ReplaceFile(binContainer.GetNodeIndex(casedTplFileName), tplFile.ToByteArray());
+
+            binContainer.AddHeaderImd5();
+            binContainer.Lz77Compress = true;
+
+            for (int i = 0; i < wadFile.BannerApp.NumOfNodes; i++)
+                if (wadFile.BannerApp.StringTable[i].ToLower() == binContainerName)
+                { wadFile.BannerApp.ReplaceFile(i, binContainer.ToByteArray()); break; }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e){
+            runAsync f = async delegate (){
+                await CopyFileAsync(romFile.Text, @"C:\Users\Leonardo\Desktop\autoinjectwad\rom.bin");
+                await CopyFileAsync(wadFile.Text, @"C:\Users\Leonardo\Desktop\autoinjectwad\ww.wad");
+                string command = "rom.bin ww.wad "+ channelName.Text+" 5 n";
+                //command += "\"" + romFile.Text + "\"" + " ";
+                //command += "\"" + wadFile.Text + "\"" + " ";
+                //command += "\"" + channelName.Text + "\"" + " 5 n";
+                using (System.Diagnostics.Process pProcess = new System.Diagnostics.Process()){
+                    pProcess.StartInfo.FileName = @"C:\Users\Leonardo\Desktop\autoinjectwad\injectuwad.exe";
+                    pProcess.StartInfo.Arguments = command; //argument
+                    pProcess.StartInfo.WorkingDirectory = @"C:\Users\Leonardo\Desktop\autoinjectwad\";
+                    pProcess.StartInfo.UseShellExecute = false;
+                    //pProcess.StartInfo.RedirectStandardOutput = true;
+                    //pProcess.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                    //pProcess.StartInfo.CreateNoWindow = true; //not diplay a windows
+                    pProcess.Start();
+                    //string output = pProcess.StandardOutput.ReadToEnd(); //The output result
+                    pProcess.WaitForExit();
+                }
+
+                WAD w = new();
+                U8 banner = new();
+                w.LoadFile(@"C:\Users\Leonardo\Desktop\autoinjectwad\VC-TextBox in ww.wad");
+                if (!w.HasBanner)
+                    throw new Exception("CustomizeMii only edits Channel WADs!");
+
+                for (int i = 0; i < w.BannerApp.NumOfNodes; i++){
+                    if (w.BannerApp.StringTable[i].ToLower() == "banner.bin")
+                    {
+                        //progressValue += 20;
+                        //bwLoadChannel.ReportProgress(progressValue, "Loading banner.bin...");
+                        banner.LoadFile(w.BannerApp.Data[i]);
+                    }
+                    //else if (sourceWad.BannerApp.StringTable[i].ToLower() == "icon.bin")
+                    //{
+                        //progressValue += 20;
+                        //bwLoadChannel.ReportProgress(progressValue, "Loading icon.bin...");
+                        //iconBin.LoadFile(sourceWad.BannerApp.Data[i]);
+                    //}
+                }
+
+                List<string> bannerBrlyts = new List<string>();
+                for (int i = 0; i < banner.NumOfNodes; i++)
+                    if (banner.StringTable[i].ToLower().EndsWith(".brlyt"))
+                        bannerBrlyts.Add(banner.StringTable[i]);
+
+                foreach(string item in bannerBrlyts){
+                    MessageBox.Show(item);
+                }
+
+                List<string> bannerTpls = new List<string>();
+                TPL_TextureFormat bannerFormat = TPL_TextureFormat.CI8;
+                TPL_PaletteFormat pFormat = TPL_PaletteFormat.RGB5A3;
+                for (int i = 0; i < banner.NumOfNodes; i++){
+                    if (banner.StringTable[i].ToLower().EndsWith(".tpl")){
+                        try{
+                            TPL tmpTpl = TPL.Load(banner.Data[i]);
+
+                            string formatString = tmpTpl.GetTextureFormat(0).ToString();
+                            if (formatString.StartsWith("CI")) formatString += "+" + tmpTpl.GetPaletteFormat(0);
+
+                            if(banner.StringTable[i].ToLower() == "vcpic.tpl"){
+                                bannerFormat = tmpTpl.GetTextureFormat(0);
+                                pFormat = tmpTpl.GetPaletteFormat(0);
+                            }
+                            //bannerTpls.Add(
+                            //    string.Format(
+                            //       "{0}   ({3},   {1} x {2},   {4})",
+                            //        banner.StringTable[i],
+                            //        tmpTpl.GetTextureSize(0).Width,
+                            //        tmpTpl.GetTextureSize(0).Height,
+                            //        formatString,
+                            //        getSizeString(
+                            //            banner.Data[i].Length
+                            //       )
+                            //    )
+                            //);
+
+                            bannerTpls.Add(banner.StringTable[i]);
+                        }
+                        catch { }
+                    }
+                }
+
+                foreach (string item in bannerTpls){
+                    MessageBox.Show(item);
+                }
+
+                string tplName = "VCPic.tpl";
+                TPL tmpTpl2;
+                System.Drawing.Image img;
+
+                tmpTpl2 = TPL.Load(banner.Data[banner.GetNodeIndex(tplName)]);
+
+                img = System.Drawing.Image.FromFile(bannerImageFile.Text);
+
+                if (img.Width != tmpTpl2.GetTextureSize(0).Width || img.Height != tmpTpl2.GetTextureSize(0).Height)
+                    img = resizeImage(img, tmpTpl2.GetTextureSize(0).Width, tmpTpl2.GetTextureSize(0).Height);
+
+                tmpTpl2.RemoveTexture(0);
+                tmpTpl2.AddTexture(img, bannerFormat, pFormat);
+
+                banner.ReplaceFile(banner.GetNodeIndex(tplName), tmpTpl2.ToByteArray());
+
+                banner.AddHeaderImd5();
+                banner.Lz77Compress = true;
+
+                for (int i = 0; i < w.BannerApp.NumOfNodes; i++)
+                    if (w.BannerApp.StringTable[i].ToLower() == "banner.bin")
+                    { w.BannerApp.ReplaceFile(i, banner.ToByteArray()); break; }
+
+                w.Save(@"C:\Users\Leonardo\Desktop\autoinjectwad\bannerReplaced.wad");
+            };
+            f();
+        }
+
+        
+    }
+}
