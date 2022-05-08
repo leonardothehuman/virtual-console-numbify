@@ -5,12 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Virtual_Console_Numbify_fw.StepGenerators
-{
-    internal class FindNeoGeoBannerBinGenerator
-    {
-        public static VirtualConsoleInjectionStep generate()
-        {
+namespace Virtual_Console_Numbify_fw.StepGenerators{
+    internal class FindNeoGeoBannerBinGenerator{
+        public static VirtualConsoleInjectionStep generate(){
             VirtualConsoleInjectionStep extractZeroSix = ExtractZeroFiveGenerator.generate("00000006");
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
             toReturn.pauseStartMessage = "Will find neogeo's banner.bin";

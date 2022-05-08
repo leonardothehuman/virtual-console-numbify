@@ -7,12 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Virtual_Console_Numbify_fw.StepGenerators
-{
-    internal class ExtractDataCcfGenerator
-    {
-        public static VirtualConsoleInjectionStep generate(bool manualInject, int inceptionLevel, bool reverse, bool disableAlert)
-        {
+namespace Virtual_Console_Numbify_fw.StepGenerators{
+    internal class ExtractDataCcfGenerator{
+        public static VirtualConsoleInjectionStep generate(bool manualInject, int inceptionLevel, bool reverse, bool disableAlert){
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
             if(inceptionLevel == 0){
                 toReturn.pauseStartMessage = "Will extract data.ccf";
@@ -34,8 +31,7 @@ namespace Virtual_Console_Numbify_fw.StepGenerators
             toReturn.milestoneList = new object[]{
                 new object()
             };
-            toReturn.process = async (InjectionEnviorunment env, MainWindowComunicator com) =>
-            {
+            toReturn.process = async (InjectionEnviorunment env, MainWindowComunicator com) => {
                 string ccfFile = Path.Combine(new string[] { env.workingExtracted05, "data.ccf" });
                 string outDir = Path.Combine(new string[] { env.workingExtracted05, @"data_ccf_OUT\" });
                 string verificationText = ccfFile + @" successfully extracted!";

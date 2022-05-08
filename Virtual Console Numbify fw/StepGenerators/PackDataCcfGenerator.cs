@@ -6,20 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Virtual_Console_Numbify_fw.StepGenerators
-{
-    internal class PackDataCcfGenerator
-    {
-        public static VirtualConsoleInjectionStep generate(bool manualInject, int inceptionLevel)
-        {
+namespace Virtual_Console_Numbify_fw.StepGenerators{
+    internal class PackDataCcfGenerator{
+        public static VirtualConsoleInjectionStep generate(bool manualInject, int inceptionLevel){
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
-            if (inceptionLevel == 0)
-            {
+            if (inceptionLevel == 0){
                 toReturn.pauseStartMessage = "Will pack data.ccf";
                 toReturn.pauseFinishedMessage = "Finished packing data.ccf file";
             }
-            if (inceptionLevel == 1)
-            {
+            if (inceptionLevel == 1){
                 toReturn.pauseStartMessage = "Will pack misc.ccf.zlib";
                 toReturn.pauseFinishedMessage = "Finished packing misc.ccf.zlib file";
             }
@@ -27,12 +22,10 @@ namespace Virtual_Console_Numbify_fw.StepGenerators
                 new object()
             };
             toReturn.process = async (InjectionEnviorunment env, MainWindowComunicator com) => {
-
                 string ccfFile = Path.Combine(new string[] { env.workingExtracted05, "data.ccf" });
                 string outDir = Path.Combine(new string[] { env.workingExtracted05, @"data_ccf_OUT\" });
                 string verificationText = ccfFile + @" successfully extracted!";
-                if (inceptionLevel == 1)
-                {
+                if (inceptionLevel == 1){
                     com.reportProgress("Extracting misc.ccf.zlib ...", toReturn.milestoneList[0]);
                     ccfFile = Path.Combine(new string[] { env.workingExtractedCcf, "misc.ccf.zlib" });
                     outDir = Path.Combine(new string[] { env.workingExtractedCcf, @"misc_ccf_zlib_OUT\" });
@@ -40,17 +33,13 @@ namespace Virtual_Console_Numbify_fw.StepGenerators
                         "Now, it's time to extract misc.ccf.zlib\n" +
                         "\n" +
                         "This step is automated with AutoItX, don't move the mouse until further instructions ...", "Misc.ccf.zlib", RecipeButtonsType.ok);
-                }
-                else
-                {
+                }else{
                     com.reportProgress("Extracting data.ccf ...", toReturn.milestoneList[0]);
                     await com.showFrontendMessage(
                         "Now, it's time to extract data.ccf\n" +
                         "\n" +
                         "This step is automated with AutoItX, don't move the mouse until further instructions ...", "Data.ccf", RecipeButtonsType.ok);
                 }
-
-
 
                 AutoItX3 saveIconEditor = new AutoItX3();
                 saveIconEditor.AutoItSetOption("MouseCoordMode", 2);
@@ -74,8 +63,7 @@ namespace Virtual_Console_Numbify_fw.StepGenerators
                 );
 
                 //Optionally stops here
-                if (manualInject == false)
-                {
+                if (manualInject == false){
                     saveIconEditor.ControlClick(
                         "[CLASS:ThunderRT6FormDC]", "",
                         "[CLASS:ThunderRT6CommandButton; INSTANCE:4]",
@@ -93,20 +81,15 @@ namespace Virtual_Console_Numbify_fw.StepGenerators
                     );
                     saveIconEditor.WinClose("[CLASS:ThunderRT6FormDC]");
 
-                    if (successTexts[1].Trim().ToLower() == verificationText.Trim().ToLower())
-                    {
+                    if (successTexts[1].Trim().ToLower() == verificationText.Trim().ToLower()){
                         //MessageBox.Show("Injected");
-                    }
-                    else
-                    {
+                    }else{
                         //MessageBox.Show(successTexts[1].Trim().ToLower());
                         //MessageBox.Show(verificationText.Trim().ToLower());
 
                         throw new Exception("Failed to extract data");
                     }
-                }
-                else
-                {
+                }else{
                     bool cok = await com.showFrontendMessage(
                         "A new window have appeared, it may be behind Virtual Console Numbify\n" +
                         "Only click yes or no on this dialog after this steps\n" +
@@ -117,18 +100,14 @@ namespace Virtual_Console_Numbify_fw.StepGenerators
                         "\n" +
                         "Was everythong ok with CCF tool ?", "CCF Tool", RecipeButtonsType.yesno
                     );
-                    if (cok == false)
-                    {
+                    if (cok == false){
                         throw new Exception("User reported that something bad happened :-(");
                     }
                 }
 
-                if (inceptionLevel == 1)
-                {
+                if (inceptionLevel == 1){
                     env.workingExtractedCcf2 = outDir;
-                }
-                else
-                {
+                }else{
                     env.workingExtractedCcf = outDir;
                 }
             };

@@ -5,8 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace Virtual_Console_Numbify_fw
-{
+namespace Virtual_Console_Numbify_fw{
     internal class InjectionEnviorunment{
         public string externalToolsBasePath;
         public string workingWad;

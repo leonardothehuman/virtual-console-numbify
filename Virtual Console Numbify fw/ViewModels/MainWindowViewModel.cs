@@ -12,10 +12,9 @@ using System.Windows;
 using System.Windows.Input;
 using Virtual_Console_Numbify_fw.StepGenerators;
 
-namespace Virtual_Console_Numbify_fw.Models
+namespace Virtual_Console_Numbify_fw
 {
-    public class MainWindowModel : INotifyPropertyChanged
-    {
+    public class MainWindowViewModel : INotifyPropertyChanged{
         public VirtualConsoleOptionsManager virtualConsoleOptionsManager = new VirtualConsoleOptionsManager();
         private delegate Task runAsync();
         public Command Inject { get; set; }
@@ -257,7 +256,7 @@ namespace Virtual_Console_Numbify_fw.Models
         public delegate Task<string> BrowseDirectoryDelegate(string title);
         private BrowseFileDelegate browseFileDelegate;
         private BrowseDirectoryDelegate browseDirectoryDelegate;
-        public MainWindowModel(MainWindowComunicator.ShowFrontendMessage del, BrowseFileDelegate bfd, BrowseDirectoryDelegate bdd)
+        public MainWindowViewModel(MainWindowComunicator.ShowFrontendMessage del, BrowseFileDelegate bfd, BrowseDirectoryDelegate bdd)
         {
             frontendMessageDelegate = del;
             browseFileDelegate = bfd;
@@ -313,16 +312,16 @@ namespace Virtual_Console_Numbify_fw.Models
                     saveFileDialog1.Filter = "WiiWare file (*.wad)|*.wad|All files (*.*)|*.*";
                     saveFileDialog1.Title = "Where to save the injected file ...";
 
-                    if (saveFileDialog1.ShowDialog() != true)
-                    {
+                    if (saveFileDialog1.ShowDialog() != true){
                         AllFieldsAreEnabled = true;
                         return;
                     }
 
-                    try
-                    {
+                    try{
                         InjectionEnviorunment enviorunment = new InjectionEnviorunment();
-                        enviorunment.externalToolsBasePath = @"C:\Users\Leonardo\Desktop";
+                        string exePath = Helpers.RemoveProtocolFromBase(Assembly.GetExecutingAssembly().GetName().CodeBase);
+                        string path = Path.GetDirectoryName(exePath);
+                        enviorunment.externalToolsBasePath = Path.Combine(path, "externalTools");
                         enviorunment.finalWadFile = saveFileDialog1.FileName;
                         enviorunment.console = (Console)SelectedConsole;
                         try { File.Delete(System.IO.Path.Combine(enviorunment.autoinjectwadPath, "initial.wad")); } catch { }
@@ -340,8 +339,7 @@ namespace Virtual_Console_Numbify_fw.Models
                         recipe.setFrontendMessageDelegate(frontendMessageDelegate);
                         
 
-                        if (enviorunment.console != Console.SMS)
-                        {
+                        if (enviorunment.console != Console.SMS){
                             recipe.addStep(InjectNewRomGenerator.generate(RomFileCompletePath));
                         }
                         recipe.addStep(CustomizeGeneratedWadGenerator.generate(

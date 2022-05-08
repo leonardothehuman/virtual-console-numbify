@@ -7,9 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Virtual_Console_Numbify_fw
-{
+namespace Virtual_Console_Numbify_fw{
     internal class Helpers{
+
+        public static string RemoveProtocolFromBase(string p) {
+            string[] paths = p.Split(':');
+            return paths[1][paths[1].Length - 1] + ":" + paths[2];
+        }
 
         public static string RemoveFromBeginning(string s, char c){
             string toReturn = "";
@@ -113,8 +117,7 @@ namespace Virtual_Console_Numbify_fw
             //string output = pProcess.StandardOutput.ReadToEnd(); //The output result
             return toReturn.Task;
         }
-        public static void extractBannerBrlyt(WAD wadFile, string destinationPath)
-        {
+        public static void extractBannerBrlyt(WAD wadFile, string destinationPath){
             string fileNameToExtract = "banner.brlyt";
 
             U8 banner = new U8();

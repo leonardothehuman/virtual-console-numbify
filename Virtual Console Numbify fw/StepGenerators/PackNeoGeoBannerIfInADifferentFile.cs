@@ -5,12 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Virtual_Console_Numbify_fw.StepGenerators
-{
-    internal class PackNeoGeoBannerIfInADifferentFile
-    {
-        public static VirtualConsoleInjectionStep generate()
-        {
+namespace Virtual_Console_Numbify_fw.StepGenerators{
+    internal class PackNeoGeoBannerIfInADifferentFile{
+        public static VirtualConsoleInjectionStep generate(){
             VirtualConsoleInjectionStep packZeroSix = PackZeroFiveGenerator.generate("00000006");
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
             toReturn.pauseStartMessage = "Will pack 00000006.app";

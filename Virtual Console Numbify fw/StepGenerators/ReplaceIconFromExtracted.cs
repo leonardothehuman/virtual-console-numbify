@@ -7,12 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Virtual_Console_Numbify_fw.StepGenerators
-{
-    internal class ReplaceIconFromExtracted
-    {
-        public static VirtualConsoleInjectionStep generate(string iconFilePath, string saveName, bool manualInject, bool disableAlert)
-        {
+namespace Virtual_Console_Numbify_fw.StepGenerators{
+    internal class ReplaceIconFromExtracted{
+        public static VirtualConsoleInjectionStep generate(string iconFilePath, string saveName, bool manualInject, bool disableAlert){
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
             toReturn.pauseStartMessage = "Will replace icon";
             toReturn.pauseFinishedMessage = "Icon replaced";

@@ -23,7 +23,7 @@
                 <Style/>
             </Button.Style>
         </Button>
-        <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding ChannelNameTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="channelName" HorizontalAlignment="Left" Margin="294,24,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197" Height="20" TextChanged="channelName_TextChanged"/>
+        <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding ChannelNameTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="channelName" HorizontalAlignment="Left" Margin="294,24,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197" Height="20" />
         <Button Command="{Binding BrowseFile}" CommandParameter="BannerImageCompletePath"  Content="Open ..." HorizontalAlignment="Left" Margin="213,166,0,0" VerticalAlignment="Top" Width="67" />
         <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding BannerImageCompletePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="bannerImageFile" HorizontalAlignment="Left" Margin="10,166,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197" Height="20"/>
         <Label Content="Banner image:" HorizontalAlignment="Left" Margin="6,140,0,0" VerticalAlignment="Top" Height="26"/>
@@ -33,8 +33,6 @@
         <Label Content="Banner Title:    (use ^ to break line)" HorizontalAlignment="Left" Margin="289,44,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.465,0.618"/>
         <Label Content="Banner Year:" HorizontalAlignment="Left" Margin="289,94,0,0" VerticalAlignment="Top"/>
         <Label Content="Banner Maximum Player Count:" HorizontalAlignment="Left" Margin="289,140,0,0" VerticalAlignment="Top"/>
-        <Button Content="Aito it !!!" HorizontalAlignment="Left" Height="24" Margin="656,127,0,0" VerticalAlignment="Top" Width="94" Click="Button_Click_4"/>
-        <Button Content="Pack" HorizontalAlignment="Left" Height="18" Margin="609,105,0,0" VerticalAlignment="Top" Width="94" Click="Button_Click_5"/>
         <Label Content="Channel Title:" HorizontalAlignment="Left" Margin="289,0,0,0" VerticalAlignment="Top" Height="28"/>
         <Label Content="New ID:    (leave empty to random)" HorizontalAlignment="Left" Margin="291,227,0,0" VerticalAlignment="Top" Height="26"/>
         <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding NewId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="changeIdBox" HorizontalAlignment="Left" Margin="294,251,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="197" Height="20"/>
@@ -57,10 +55,7 @@
         <Label Content="Status: " HorizontalAlignment="Left" Height="26" Margin="10,386,0,0" VerticalAlignment="Top" Width="44"/>
         <Label Content="{Binding Status, Mode=TwoWay}" x:Name="statusLabel" HorizontalAlignment="Left" Margin="54,386,0,0" VerticalAlignment="Top" Width="437"/>
         <ProgressBar Value="{Binding Progress, Mode=TwoWay}" x:Name="progressBar" HorizontalAlignment="Left" Height="25" Margin="10,417,0,0" VerticalAlignment="Top" Width="481"/>
-        <Button Content="Button" HorizontalAlignment="Left" Height="34" Margin="134,469,0,0" VerticalAlignment="Top" Width="74" Click="Button_Click_8"/>
         <CheckBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" IsChecked="{Binding PauseOnEveryStep, Mode=TwoWay}" x:Name="pauseBl" Content="Pause process on every step" HorizontalAlignment="Left" Margin="14,447,0,0" VerticalAlignment="Top"/>
         <CheckBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" IsChecked="{Binding DisableAutoitXAlert, Mode=TwoWay}" x:Name="disableAutoitBl" Content="Disabe AutoitX automation alert" HorizontalAlignment="Left" Margin="188,447,0,0" VerticalAlignment="Top"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="392,455,0,0" VerticalAlignment="Top"/>
-
     </Grid>
 </Window>

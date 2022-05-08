@@ -5,12 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Virtual_Console_Numbify_fw.StepGenerators
-{
-    internal class GenerateNeoGeoBannerGenerator
-    {
-        public static VirtualConsoleInjectionStep generate(string iconFilePath, string title)
-        {
+namespace Virtual_Console_Numbify_fw.StepGenerators{
+    internal class GenerateNeoGeoBannerGenerator{
+        public static VirtualConsoleInjectionStep generate(string iconFilePath, string title){
             FileStream destinationStream = null;
             FileStream originBanner = null;
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();

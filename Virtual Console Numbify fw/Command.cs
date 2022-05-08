@@ -5,10 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Virtual_Console_Numbify_fw
-{
-    public class Command : ICommand
-    {
+namespace Virtual_Console_Numbify_fw{
+    public class Command : ICommand{
         public delegate void commandToExecute(object parameter);
         public delegate bool canExecute(object parameter);
         private readonly commandToExecute CommandToExecute;

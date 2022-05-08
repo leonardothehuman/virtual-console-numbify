@@ -5,12 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Virtual_Console_Numbify_fw.StepGenerators
-{
-    internal class PackZeroFiveGenerator
-    {
-        public static VirtualConsoleInjectionStep generate(string overrideFile = "00000005")
-        {
+namespace Virtual_Console_Numbify_fw.StepGenerators{
+    internal class PackZeroFiveGenerator{
+        public static VirtualConsoleInjectionStep generate(string overrideFile = "00000005"){
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
             toReturn.pauseStartMessage = "Will pack " + overrideFile + ".app";
             toReturn.pauseFinishedMessage = overrideFile + ".app packed";

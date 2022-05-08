@@ -6,12 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Virtual_Console_Numbify_fw.StepGenerators
-{
-    internal class ExtractWadGenerator
-    {
-        public static VirtualConsoleInjectionStep generate()
-        {
+namespace Virtual_Console_Numbify_fw.StepGenerators{
+    internal class ExtractWadGenerator{
+        public static VirtualConsoleInjectionStep generate(){
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
             toReturn.pauseStartMessage = "Will extract wad";
             toReturn.pauseFinishedMessage = "Wad extraction finished";

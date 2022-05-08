@@ -6,12 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Virtual_Console_Numbify_fw.StepGenerators
-{
-    internal class PackExtractedWadGenerator
-    {
-        public static VirtualConsoleInjectionStep generate()
-        {
+namespace Virtual_Console_Numbify_fw.StepGenerators{
+    internal class PackExtractedWadGenerator{
+        public static VirtualConsoleInjectionStep generate(){
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
             toReturn.pauseStartMessage = "Will pack a wad file";
             toReturn.pauseFinishedMessage = "Wad packing finnished";

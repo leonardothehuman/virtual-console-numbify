@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows;
 
-namespace Virtual_Console_Numbify_fw.StepGenerators
-{
+namespace Virtual_Console_Numbify_fw.StepGenerators{
     internal class InjectNewRomGenerator{
         public static VirtualConsoleInjectionStep generate(string romFilePath){
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
@@ -94,8 +93,7 @@ namespace Virtual_Console_Numbify_fw.StepGenerators
                         Path.Combine(env.devilkenInjectorPath, "title.wad"),
                         Path.Combine(env.autoinjectwadPath, "VC-newinjection in ww.wad")
                     );
-                }
-                else{
+                }else{
                     await Helpers.CopyFileAsync(env.workingWad, Path.Combine(env.autoinjectwadPath, "ww.wad"));
                     File.Delete(env.workingWad);
                     env.workingWad = Path.Combine(env.autoinjectwadPath, "ww.wad");

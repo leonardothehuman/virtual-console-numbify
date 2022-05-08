@@ -5,12 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Virtual_Console_Numbify_fw.StepGenerators
-{
-    internal class ReplaceSMSRom
-    {
-        public static VirtualConsoleInjectionStep generate(string romFilePath)
-        {
+namespace Virtual_Console_Numbify_fw.StepGenerators{
+    internal class ReplaceSMSRom{
+        public static VirtualConsoleInjectionStep generate(string romFilePath){
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
             toReturn.pauseStartMessage = "Will inject master system rom";
             toReturn.pauseFinishedMessage = "Master system rom injection finnished";

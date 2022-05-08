@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Virtual_Console_Numbify_fw
-{
+namespace Virtual_Console_Numbify_fw{
     public enum RecipeButtonsType{
         ok = 0,
         yesno = 1
