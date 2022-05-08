@@ -35,13 +35,13 @@ https://support.microsoft.com/pt-br/topic/instalador-offline-do-microsoft-net-fr
 Just fill all the fields and follow your heart...
 
 ## Planned features
-[] - Flash support
+- [ ] Flash support
 
-[] - PC engine CD support
+- [ ] PC engine CD support
 
-[] - Commodore 64 support
+- [ ] Commodore 64 support
 
-[] - MSX support
+- [ ] MSX support
 
 ## Credits
 
