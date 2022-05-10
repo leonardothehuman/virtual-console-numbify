@@ -38,6 +38,7 @@ namespace Virtual_Console_Numbify_fw
             get { return selectedConsole; }
             set {
                 selectedConsole = value;
+                SaveName = SaveName;
                 validateForm();
                 NotyfyChange();
             }
@@ -138,8 +139,24 @@ namespace Virtual_Console_Numbify_fw
             get { return saveName; }
             set {
                 string toSet = Helpers.AllowOnlyOneCircunflexDiacritic(value);
+                if(
+                    SelectedConsole == Console.SMS ||
+                    SelectedConsole == Console.SMD
+                //|| SelectedConsole == Console.MSX
+                ) {
+                    toSet = Helpers.BlockCircunflexDiacritic(toSet);
+                }
                 saveName = Helpers.TruncateString(toSet, 20);
                 validateForm();
+                NotyfyChange();
+            }
+        }
+
+        private string saveNameLabel = "";
+        public string SaveNameLabel {
+            get { return saveNameLabel; }
+            set {
+                saveNameLabel = value;
                 NotyfyChange();
             }
         }
@@ -236,6 +253,15 @@ namespace Virtual_Console_Numbify_fw
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void validateForm(){
+            if (
+                    SelectedConsole == Console.SMS ||
+                    SelectedConsole == Console.SMD
+                //|| SelectedConsole == Console.MSX
+                ) {
+                SaveNameLabel = "Save Name:";
+            } else {
+                SaveNameLabel = "Save Name:    (use ^ to break line)";
+            }
             Inject.ChangeCanExecute();
             BrowseFile.ChangeCanExecute();
             BrowseRom.ChangeCanExecute();

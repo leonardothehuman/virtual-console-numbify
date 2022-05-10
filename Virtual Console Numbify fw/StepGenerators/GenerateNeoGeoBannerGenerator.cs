@@ -68,6 +68,7 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                 );
                 originBanner.Seek(0x1A0, SeekOrigin.Begin);
                 await originBanner.CopyToAsync(destinationStream);
+                await originBanner.FlushAsync();
                 await destinationStream.FlushAsync();
                 destinationStream.Dispose();
                 destinationStream = null;

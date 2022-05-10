@@ -60,7 +60,15 @@ namespace Virtual_Console_Numbify_fw.StepGenerators
                         "banner.brlyt",
                         "-Title", bannerGameTitle,
                         "-YEAR", bannerYear.ToString(),
-                        "-Play", bannerMaximumPlayerCount.ToString()
+                        "-Play", bannerMaximumPlayerCount.ToString(),
+                        "-H_T_ESRB_ENG", " ",
+                        "-H_T_ESRB_FRA", " ",
+                        "-H_T_ESRB_SPA", " ",
+                        "-H_T_ESRB_GER", " ",
+                        "-H_T_ESRB_ITA", " ",
+                        "-H_T_ESRB_NED", " ",
+                        "-H_T_ESRB_JPN", " ",
+                        "-H_T_ESRB_NONE", " "
                     }
                 );
 

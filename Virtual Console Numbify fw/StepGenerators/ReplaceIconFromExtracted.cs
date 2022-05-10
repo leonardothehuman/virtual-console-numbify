@@ -66,6 +66,24 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                         tplFile = Path.Combine(Path.Combine(env.AutoinjectwadPath, @"icons")) + "\\";
                         appFile = Path.Combine(new string[] { env.WorkingExtractedCcf2, @"banner.cfg.txt" });
                         Helpers.NotmalizeLineEnd(Path.Combine(env.WorkingExtractedCcf2, "banner.cfg.txt"));
+                        if(File.Exists(Path.Combine(env.WorkingExtractedCcf2, "comment"))) {
+                            File.Delete(Path.Combine(env.WorkingExtractedCcf2, "comment"));
+                            using (
+                                FileStream destinationStream = new FileStream(
+                                    Path.Combine(env.WorkingExtractedCcf2, "comment"), FileMode.CreateNew, FileAccess.Write,
+                                    FileShare.None, 4096, FileOptions.Asynchronous | FileOptions.SequentialScan
+                                )
+                            ) {
+                                byte[] stringToInsert = Encoding.UTF8.GetBytes(saveName);
+                                await destinationStream.WriteAsync(stringToInsert, 0, stringToInsert.Length);
+                                destinationStream.WriteByte(0x0A);
+                                await destinationStream.WriteAsync(
+                                    Encoding.UTF8.GetBytes("MASTER SYSTEM"), 0, 13
+                                );
+                                destinationStream.WriteByte(0x0A);
+                                await destinationStream.FlushAsync();
+                            }
+                        }
                         verificationText0 = env.WorkingExtractedCcf2;
                         verificationText1 = @"WTE Files Successfully Copied!";
                         verificationText2 = @"Titles Successfully Injected into " + appFile + @"!";

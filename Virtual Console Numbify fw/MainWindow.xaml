@@ -46,7 +46,7 @@
         <Label Content="Icon:" HorizontalAlignment="Left" Margin="6,186,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.526,0.541" Height="24" Width="60"/>
         <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding SaveIconCompletePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="saveIcon" HorizontalAlignment="Left" Margin="10,251,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197" Height="20"/>
         <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding SaveName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="saveName" HorizontalAlignment="Left" Margin="294,211,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197" Height="19"/>
-        <Label Content="Save Name:    (use ^ to break line)" HorizontalAlignment="Left" Margin="291,185,0,0" VerticalAlignment="Top" Height="26" Width="191"/>
+        <Label Content="{Binding SaveNameLabel, Mode=TwoWay}" HorizontalAlignment="Left" Margin="291,185,0,0" VerticalAlignment="Top" Height="26" Width="191"/>
         <CheckBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" IsChecked="{Binding AllowEditing, Mode=TwoWay}" x:Name="manualSave" Content="Allow Manual Editing Save Icon Inject And CCF Extraction" HorizontalAlignment="Left" Margin="10,278,0,0" VerticalAlignment="Top"/>
         <Label Content="Save Icon:" HorizontalAlignment="Left" Margin="6,227,0,0" VerticalAlignment="Top"/>
         <Button Command="{Binding BrowseFile}" CommandParameter="SaveIconCompletePath"  Content="Open ..." HorizontalAlignment="Left" Margin="213,251,0,0" VerticalAlignment="Top" Width="66" />
