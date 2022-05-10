@@ -42,12 +42,51 @@ namespace Virtual_Console_Numbify_fw{
             }
             return toReturn;
         }
+
+        public static string UniqueChars(string s) {
+            Dictionary<char, char> charList= new Dictionary<char, char>();
+            for (int i = 0; i < s.Length; i++) {
+                charList[s[i]] = s[i];
+            }
+            string toReturn = "";
+            foreach (char c in charList.Keys) {
+                toReturn += c;
+            }
+            return toReturn;
+        }
+
+        public static string IsOrAre(int n) {
+            if (n == 1) return "is";
+            return "are";
+        }
+
+        public static string SplitCharsIntoHumanReadbleList(string s) {
+            char[] l = s.ToCharArray();
+            string toReturn = "";
+            for (int i = 0; i < l.Length; i++) {
+                if (toReturn.Length == 0)
+                    toReturn += l[i];
+                else if (i != l.Length - 1)
+                    toReturn += ", " + l[i];
+                else
+                    toReturn += " and " + l[i];
+            }
+            return toReturn;
+        }
         public static string AllowOnlyOneCircunflexDiacritic(string s){
             string toReturn = "";
             bool diacriticInserted = false;
             for (int i = 0; i < s.Length; i++){
                 if (s[i] == '^' && diacriticInserted == true) continue;
                 if (s[i] == '^') diacriticInserted = true;
+                toReturn += s[i];
+            }
+            return toReturn;
+        }
+        public static string BlockCircunflexDiacritic(string s) {
+            string toReturn = "";
+            for (int i = 0; i < s.Length; i++) {
+                if (s[i] == '^') continue;
                 toReturn += s[i];
             }
             return toReturn;

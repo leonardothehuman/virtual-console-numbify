@@ -1,6 +1,8 @@
 # Virtual Console Numbify
 An automated tool to create Wii virtualconsole injections
 
+Created by leonardothehuman (leonardorg)
+
 This is an automation tool that uses several third part tools to automatically replace
 Rom files on Nintendo Wii's virtual console's Wad files, allowing you to create your own
 Injects.

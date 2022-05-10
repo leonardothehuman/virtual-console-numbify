@@ -88,7 +88,7 @@ namespace Virtual_Console_Numbify_fw
         public string ChannelNameTitle{
             get { return channelNameTitle; }
             set {
-                string toSet = Helpers.AllowOnlyOneCircunflexDiacritic(value);
+                string toSet = Helpers.BlockCircunflexDiacritic(value);
                 channelNameTitle = Helpers.TruncateString(toSet, 20);
                 validateForm();
                 NotyfyChange();
@@ -208,6 +208,15 @@ namespace Virtual_Console_Numbify_fw
             get { return status; }
             set { 
                 status = value;
+                NotyfyChange();
+            }
+        }
+
+        private bool statusAlert = false;
+        public bool StatusAlert {
+            get { return statusAlert; }
+            set {
+                statusAlert = value;
                 NotyfyChange();
             }
         }
@@ -372,6 +381,7 @@ namespace Virtual_Console_Numbify_fw
 
                         VirtualConsoleInjectionRecipe recipe = new VirtualConsoleInjectionRecipe(enviorunment, PauseOnEveryStep);
                         recipe.progressReported += (object sender2, ProgressReportEventArgs args) => {
+                            StatusAlert = false;
                             Status = args.progressMessage;
                             Progress = args.progressNumber;
                         };
@@ -444,14 +454,17 @@ namespace Virtual_Console_Numbify_fw
             }, (object obj) => {
                 if (AllFieldsAreEnabled == false) return false;
                 if (!Helpers.IsAValidWinPath(BaseWad.Trim())){
+                    StatusAlert = true;
                     Status = "You must specify a Wad file";
                     return false;
                 }
                 if (SelectedConsole == null){
+                    StatusAlert = true;
                     Status = "You must specify a console for the injection";
                     return false;
                 }
                 if (!Helpers.IsAValidWinPath(RomFileCompletePath.Trim())){
+                    StatusAlert = true;
                     if (selectedConsole == Console.NGAES) {
                         Status = "You must specify a rom directory";
                     } else {
@@ -460,43 +473,53 @@ namespace Virtual_Console_Numbify_fw
                     return false;
                 }
                 if (!Helpers.IsAValidWinPath(BannerImageCompletePath.Trim())){
+                    StatusAlert = true;
                     Status = "You must specify an image to use on the banner";
                     return false;
                 }
                 if (!Helpers.IsAValidWinPath(IconImageCompletePath.Trim())){
+                    StatusAlert = true;
                     Status = "You must specify an image to use as an icon";
                     return false;
                 }
                 if (!Helpers.IsAValidWinPath(SaveIconCompletePath.Trim())){
+                    StatusAlert = true;
                     Status = "You must specify an image to use as a save icon";
                     return false;
                 }
 
                 if (ChannelNameTitle.Trim().Length <= 0){
+                    StatusAlert = true;
                     Status = "You must specify the channel title";
                     return false;
                 }
                 if (BannerTitle.Trim().Length <= 0){
+                    StatusAlert = true;
                     Status = "You must specify a text to appear on the banner";
                     return false;
                 }
                 if (BannerYear.Trim().Length < 4){
+                    StatusAlert = true;
                     Status = "You must specify the game's release year";
                     return false;
                 }
                 if (BannerMaximumPlayerCount.Trim().Length <= 0){
+                    StatusAlert = true;
                     Status = "You must specify the game's player count";
                     return false;
                 }
                 if (SaveName.Trim().Length <= 0){
+                    StatusAlert = true;
                     Status = "You must specify the name of the save file";
                     return false;
                 }
                 if (NewId.Trim().Length > 0 && NewId.Trim().Length < 4){
+                    StatusAlert = true;
                     Status = "You must specify a valid Wad id or leave it empty";
                     return false;
                 }
 
+                StatusAlert = false;
                 Status = "You can now inject the rom if everything is correct";
 
                 return true;
@@ -505,6 +528,7 @@ namespace Virtual_Console_Numbify_fw
             runAsync f2 = async delegate () {
                 try {
                     if (!File.Exists(Path.Combine(Helpers.GetExeDirectory(), "common-key.bin"))) {
+                        StatusAlert = true;
                         Status = "common-key.bin not found";
                         await frontendMessageDelegate(
                             "The common-key.bin file was not found, please, put this file on the program's directory and try again\n" +
@@ -515,6 +539,35 @@ namespace Virtual_Console_Numbify_fw
                             "You can also put an empty file instead of the real common-key.bin, but the injection process will fail :-(", "Error: common-key.bin not found", RecipeButtonsType.ok);
                         return;
                     };
+                    string dir = Helpers.GetExeDirectory();
+                    char[] validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789 \\/:".ToCharArray();
+                    string invalidList = "";
+                    for (int i = 0; i < dir.Length; i++) {
+                        if(!Array.Exists(validChars, e => e == dir[i])) {
+                            invalidList += dir[i];
+                        }
+                    }
+                    if(invalidList != "") {
+                        await frontendMessageDelegate(
+                            "Sorry, but some third-party tools that this program uses are very picky with the chars " +
+                            "that are allowed on the path, otherwise, it will not work correctly so, I decided to only " +
+                            "allow this program to run if extracted to a path that only contains alphanumeric " +
+                            "chars, number and spaces ... \n" +
+                            "\n" +
+                            "The current path is: "+ dir + "\n" +
+                            "\n" +
+                            "The invalid chars on this path "+ 
+                            Helpers.IsOrAre(Helpers.UniqueChars(invalidList).Length) + ": "+
+                            Helpers.SplitCharsIntoHumanReadbleList(Helpers.UniqueChars(invalidList)) + "\n" +
+                            "\n" +
+                            "Sorry Japanese users :-(",
+                            "Error",
+                            RecipeButtonsType.ok
+                        );
+                        StatusAlert = true;
+                        Status = "You must move Virtual Console Numbify to a valid path.";
+                        return;
+                    }
                     InjectionEnviorunment env = new InjectionEnviorunment();
                     File.Delete(Path.Combine(env.AutoinjectwadPath, "common-key.bin"));
                     //if (!File.Exists(Path.Combine(env.AutoinjectwadPath, "common-key.bin"))) {
@@ -535,7 +588,7 @@ namespace Virtual_Console_Numbify_fw
                         !File.Exists(Path.Combine(Environment.SystemDirectory, "msvbvm60.dll"))
                     ) {
                         await frontendMessageDelegate(
-                            "Don't forget to read the readme.txt file to ensure that all required libraries are installed.\n" +
+                            "Don't forget to read the Readme-Virtual-Console-Numbify.txt file to ensure that all required libraries are installed.\n" +
                             "\n" +
                             "It seems like one of the prerequisites is not installed, but, since I am not sure if the checks are 100% correct, I will let you use the application, just, read the readme.txt file again if something goes wrong and ALWAYS TEST THE OUPUT WAD on an emunand before installing it on the real nand.",
                             "Alert",

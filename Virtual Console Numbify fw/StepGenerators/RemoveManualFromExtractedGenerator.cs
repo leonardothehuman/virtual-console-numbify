@@ -9,12 +9,20 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
     internal class RemoveManualFromExtractedGenerator{
         public static VirtualConsoleInjectionStep Generate(){
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
+            VirtualConsoleInjectionStep extractZeroFour = ExtractZeroFiveGenerator.Generate("00000004");
+            VirtualConsoleInjectionStep packZeroFour = PackZeroFiveGenerator.Generate("00000004");
             toReturn.pauseStartMessage = "Will delete manual";
             toReturn.pauseFinishedMessage = "Manual deleted";
-            toReturn.milestoneList = new object[]{
-                new object(),
-                new object()
-            };
+            List<object> ml = new List<object>();
+            ml.Add(new object());
+            ml.Add(new object());
+            for (int i = 0; i < extractZeroFour.milestoneList.Length; i++) {
+                ml.Add(extractZeroFour.milestoneList[i]);
+            }
+            for (int i = 0; i < packZeroFour.milestoneList.Length; i++) {
+                ml.Add(packZeroFour.milestoneList[i]);
+            }
+            toReturn.milestoneList = ml.ToArray();
             toReturn.process = async (InjectionEnviorunment env, MainWindowComunicator com) => {
                 com.reportProgress("Deleting manual file ...", toReturn.milestoneList[0]);
                 switch (env.console){
@@ -42,22 +50,36 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                 }
                 
                 com.reportProgress("Replacing 00000004.app ...", toReturn.milestoneList[1]);
-                File.Move(
+                /*File.Move(
                     Path.Combine(new string[] { env.WorkingExtracted, "00000004.app" }),
                     Path.Combine(new string[] { env.WorkingExtracted, "00000004.old.app" })
                 );
                 await Helpers.CopyFileAsync(
                     env.ZeroFourApp, Path.Combine(new string[] { env.WorkingExtracted, "00000004.app" })
+                );*/
+                await extractZeroFour.process(env, com);
+                Helpers.clearDirectory(Path.Combine(env.WorkingExtracted, @"00000004_app_OUT\HomeButton3"));
+                await Helpers.CopyAllFilesOnDirectory(
+                    Path.Combine(env.WorkingExtracted, @"00000004_app_OUT\HomeButton2"),
+                    Path.Combine(env.WorkingExtracted, @"00000004_app_OUT\HomeButton3"),
+                    true
                 );
+                await packZeroFour.process(env, com);
             };
             toReturn.errorCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
                 Helpers.RemoveAllDirectoriesFromDirectory(env.AutoinjectwadPath);
+                await extractZeroFour.errorCleanup(env, com);
+                await packZeroFour.errorCleanup(env, com);
             };
             toReturn.preEverythingCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
                 Helpers.RemoveAllDirectoriesFromDirectory(env.AutoinjectwadPath);
+                await extractZeroFour.preEverythingCleanup(env, com);
+                await packZeroFour.preEverythingCleanup(env, com);
             };
             toReturn.processCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
                 File.Delete(Path.Combine(new string[] { env.WorkingExtracted, "00000004.old.app" }));
+                await extractZeroFour.processCleanup(env, com);
+                await packZeroFour.processCleanup(env, com);
             };
             return toReturn;
         }

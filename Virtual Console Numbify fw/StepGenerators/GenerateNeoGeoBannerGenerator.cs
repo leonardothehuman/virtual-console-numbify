@@ -10,6 +10,7 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
         public static VirtualConsoleInjectionStep Generate(string iconFilePath, string title){
             FileStream destinationStream = null;
             FileStream originBanner = null;
+            string tempIcon = "tempicon"+ Path.GetExtension(iconFilePath);
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
             toReturn.pauseStartMessage = "Will inject save banner";
             toReturn.pauseFinishedMessage = "Save banner injection finnished";
@@ -27,13 +28,16 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                     );
                     return;
                 }
+
+                string tempIconDest = Path.Combine(env.AutoinjectwadPath, tempIcon);
+                await Helpers.CopyFileAsync(iconFilePath, tempIconDest);
                 
                 await Helpers.ExecuteExternalProcess(
                     Path.Combine(env.VCiconPath, "VC_Icon_Gen.exe"),
                     env.VCiconPath,
                     new string[] {
                         "-sys", "neogeo",
-                        "-s", "\""+iconFilePath+"\"",
+                        "-s", "\""+tempIconDest+"\"",
                         "-d", "\""+Path.Combine(env.AutoinjectwadPath, @"icons\")+"\"",
                         "-m", "s"
                     },
@@ -79,11 +83,14 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                     originBanner.Dispose();
                 }
                 Helpers.RemoveAllDirectoriesFromDirectory(env.AutoinjectwadPath);
+                File.Delete(Path.Combine(env.AutoinjectwadPath, tempIcon));
             };
             toReturn.preEverythingCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
+                File.Delete(Path.Combine(env.AutoinjectwadPath, tempIcon));
                 Helpers.RemoveAllDirectoriesFromDirectory(env.AutoinjectwadPath);
             };
             toReturn.processCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
+                File.Delete(Path.Combine(env.AutoinjectwadPath, tempIcon));
                 Directory.Delete(Path.Combine(env.AutoinjectwadPath, @"icons"), true);
             };
             return toReturn;

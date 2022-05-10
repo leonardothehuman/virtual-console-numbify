@@ -11,6 +11,7 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
     internal class ReplaceIconFromExtracted{
         public static VirtualConsoleInjectionStep Generate(string iconFilePath, string saveName, bool manualInject, bool disableAlert){
             VirtualConsoleInjectionStep toReturn = new VirtualConsoleInjectionStep();
+            string tempIcon = "tempicon" + Path.GetExtension(iconFilePath);
             toReturn.pauseStartMessage = "Will replace icon";
             toReturn.pauseFinishedMessage = "Icon replaced";
             toReturn.milestoneList = new object[]{
@@ -86,12 +87,16 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                         throw new NotImplementedException("The selected console is not supported yet ...");
                 }
                 Directory.CreateDirectory(Path.Combine(env.AutoinjectwadPath, "icons"));
+
+                string tempIconDest = Path.Combine(env.AutoinjectwadPath, tempIcon);
+                await Helpers.CopyFileAsync(iconFilePath, tempIconDest);
+
                 await Helpers.ExecuteExternalProcess(
                     Path.Combine(env.VCiconPath, "VC_Icon_Gen.exe"),
                     env.VCiconPath,
                     new string[] {
                         "-sys", consoleCode,
-                        "-s", "\""+iconFilePath+"\"",
+                        "-s", "\""+tempIconDest+"\"",
                         "-d", "\""+Path.Combine(env.AutoinjectwadPath, @"icons\")+"\"",
                         "-m", "s"
                     },
@@ -235,13 +240,16 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
             toReturn.errorCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
                 Helpers.RemoveAllFilesWithAnSpecificExtensionFromDirectory(env.VCiconPath, ".tga");
                 Helpers.RemoveAllDirectoriesFromDirectory(env.AutoinjectwadPath);
+                File.Delete(Path.Combine(env.AutoinjectwadPath, tempIcon));
             };
             toReturn.preEverythingCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
                 Helpers.RemoveAllFilesWithAnSpecificExtensionFromDirectory(env.VCiconPath, ".tga");
                 Helpers.RemoveAllDirectoriesFromDirectory(env.AutoinjectwadPath);
+                File.Delete(Path.Combine(env.AutoinjectwadPath, tempIcon));
             };
             toReturn.processCleanup = async (InjectionEnviorunment env, MainWindowComunicator com) => {
                 Directory.Delete(Path.Combine(env.AutoinjectwadPath, @"icons"), true);
+                File.Delete(Path.Combine(env.AutoinjectwadPath, tempIcon));
             };
             return toReturn;
         }

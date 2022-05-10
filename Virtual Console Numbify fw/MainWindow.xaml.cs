@@ -20,6 +20,7 @@ using System.Windows.Shapes;
 using AutoItX3Lib;
 using Virtual_Console_Numbify_fw.StepGenerators;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace Virtual_Console_Numbify_fw
 {
@@ -73,6 +74,10 @@ namespace Virtual_Console_Numbify_fw
             });
             this.DataContext = mainWindowModel;
             consoleSelect.ItemsSource = mainWindowModel.virtualConsoleOptionsManager.supportedConsoles;
+        }
+
+        private void TextBlock_MouseUp(object sender, MouseButtonEventArgs e) {
+            Process.Start("https://wiki.gbatemp.net/wiki/Wii_VC_Injections_Compatibility_List");
         }
     }
 }

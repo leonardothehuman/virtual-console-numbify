@@ -3,10 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Virtual_Console_Numbify_fw"
+        xmlns:local="clr-namespace:Virtual_Console_Numbify_fw" 
         mc:Ignorable="d"
         ResizeMode="NoResize"
         Title="Virtual Console Numbify" Height="517" Width="516">
+    <Window.Resources>
+        <local:BooleanToForegroundColorConverter x:Key="BooleanToForegroundColorConverter" />
+        <local:BooleanToBackgroundColorConverter x:Key="BooleanToBackgroundColorConverter" />
+    </Window.Resources>
     <Grid x:Name="consoleList" Margin="0,0,0,0">
         <ComboBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" SelectedValue="{Binding SelectedConsole}"  SelectedValuePath="Key" DisplayMemberPath="Value" x:Name="consoleSelect" HorizontalAlignment="Left" Height="24" Margin="10,70,0,0" VerticalAlignment="Top" Width="269" >
 
@@ -53,9 +57,15 @@
         <Label Content="injecting save icon or extracting CCF file, this option will allow" HorizontalAlignment="Left" Margin="10,340,0,0" VerticalAlignment="Top" Width="338"/>
         <Label Content="review the automated window manually before proceding." HorizontalAlignment="Left" Margin="10,355,0,0" VerticalAlignment="Top" Width="336"/>
         <Label Content="Status: " HorizontalAlignment="Left" Height="26" Margin="10,386,0,0" VerticalAlignment="Top" Width="44"/>
-        <Label Content="{Binding Status, Mode=TwoWay}" x:Name="statusLabel" HorizontalAlignment="Left" Margin="54,386,0,0" VerticalAlignment="Top" Width="437"/>
+        <Label Content="{Binding Status, Mode=TwoWay}"
+               Foreground="{Binding StatusAlert, Mode=TwoWay, Converter={StaticResource BooleanToForegroundColorConverter}}"
+               Background="{Binding StatusAlert, Mode=TwoWay, Converter={StaticResource BooleanToBackgroundColorConverter}}"
+               x:Name="statusLabel" HorizontalAlignment="Left" Margin="54,386,0,0" VerticalAlignment="Top" Width="437" FontWeight="Bold"/>
         <ProgressBar Value="{Binding Progress, Mode=TwoWay}" x:Name="progressBar" HorizontalAlignment="Left" Height="25" Margin="10,417,0,0" VerticalAlignment="Top" Width="481"/>
         <CheckBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" IsChecked="{Binding PauseOnEveryStep, Mode=TwoWay}" x:Name="pauseBl" Content="Pause process on every step" HorizontalAlignment="Left" Margin="14,447,0,0" VerticalAlignment="Top"/>
         <CheckBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" IsChecked="{Binding DisableAutoitXAlert, Mode=TwoWay}" x:Name="disableAutoitBl" Content="Disabe AutoitX automation alert" HorizontalAlignment="Left" Margin="188,447,0,0" VerticalAlignment="Top"/>
+        <Label Cursor="Hand" Foreground="Blue" HorizontalAlignment="Left" Margin="182,1,0,0" VerticalAlignment="Top" FontStyle="Normal" Width="105">
+            <TextBlock TextDecorations="Underline" MouseUp="TextBlock_MouseUp">Compatibility List</TextBlock>
+        </Label>
     </Grid>
 </Window>

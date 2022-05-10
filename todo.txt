@@ -1,0 +1,4 @@
+Create update server
+Create about box
+Remove esrb text
+Master system's comment
