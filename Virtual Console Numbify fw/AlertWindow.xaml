@@ -6,9 +6,10 @@
         xmlns:local="clr-namespace:Virtual_Console_Numbify_fw"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="Are you grateful for the life you live?" Height="521" Width="757">
-    <Grid>
-        <RichTextBox IsReadOnly="True" Cursor="Arrow" Focusable="False" Margin="0,0,0,54">
+        SizeToContent="WidthAndHeight"
+        Title="Are you grateful for the life you live?" Height="auto" Width="auto">
+    <Grid Width="757" Height="471">
+        <RichTextBox IsReadOnly="True" Cursor="Arrow" Focusable="False" Margin="10,0,10,51" BorderThickness="0,0,0,0">
             <RichTextBox.Resources>
                 <Style TargetType="Hyperlink">
                     <Setter Property="Cursor" Value="Hand" />
@@ -58,17 +59,16 @@
                     basically should ensure that you have a way to uninstall it if something goes wrong, and ALWAYS TEST THE
                     OUTPUT FILE ON AN EMUNAND to make sure that the wad will not mess with Wii's system menu,
                     testing on Dolphin is not enough, since Dolphin
-                    will not run the banner or other parts of the file that may damage your system it something is wrong.
+                    will not run the banner or other parts of the file that may damage your system if something is wrong.
                 </Paragraph>
                 <Paragraph>
-                    Do you understand what you are doing, and will you ensure that all recovery tools, like priiloader and bootmii are working properly before installing the output wads?"
+                    <Bold Foreground="Red" FontSize="12">DO YOU REALLY UNDERSTAND WHAT YOU ARE DOING, AND WILL YOU ENSURE THAT ALL RECOVERY TOOLS, LIKE PRIILOADER AND BOOTMII ARE WORKING PROPERLY BEFORE INSTALLING THE OUTPUT WADS?</Bold>
                     <!--Hyperlink NavigateUri="http://google.com">
                         link to document2</Hyperlink-->
                 </Paragraph>
             </FlowDocument>
         </RichTextBox>
-        <Button Content="Yes" HorizontalAlignment="Left" Margin="588,436,0,0" VerticalAlignment="Top" Height="38" Width="145" FontSize="22" Click="Button_Click"/>
-        <Button Content="No" HorizontalAlignment="Left" Margin="438,436,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.503" Height="38" Width="145" FontSize="22" Click="Button_Click_1"/>
-
+        <Button Content="Yes" HorizontalAlignment="Left" Margin="602,425,0,0" VerticalAlignment="Top" Height="38" Width="145" FontSize="22" Click="Button_Click"/>
+        <Button Content="No" HorizontalAlignment="Left" Margin="452,425,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.503" Height="38" Width="145" FontSize="22" Click="Button_Click_1"/>
     </Grid>
 </Window>

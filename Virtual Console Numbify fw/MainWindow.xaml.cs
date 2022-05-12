@@ -76,6 +76,10 @@ namespace Virtual_Console_Numbify_fw
             consoleSelect.ItemsSource = mainWindowModel.virtualConsoleOptionsManager.supportedConsoles;
         }
 
+        private void Hyperlink_MouseLeftButtonDown(object sender, MouseEventArgs e) {
+            var hyperlink = (Hyperlink)sender;
+            Process.Start(hyperlink.NavigateUri.ToString());
+        }
         private void TextBlock_MouseUp(object sender, MouseButtonEventArgs e) {
             Process.Start("https://wiki.gbatemp.net/wiki/Wii_VC_Injections_Compatibility_List");
         }

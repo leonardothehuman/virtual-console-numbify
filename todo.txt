@@ -1,3 +1,2 @@
 Create update server
-Create about box
 Block some ids

@@ -1,10 +1,12 @@
 ﻿using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -20,8 +22,8 @@ namespace Virtual_Console_Numbify_fw
         private delegate Task runAsync();
         public Command Inject { get; set; }
         public Command BrowseFile { get; set; }
-
         public Command BrowseRom { get; set; }
+        public Command DownloadUpdate { get; set; }
         private string baseWad = "";
         public string BaseWad {
             get { return baseWad; }
@@ -166,6 +168,27 @@ namespace Virtual_Console_Numbify_fw
             get { return newId; }
             set {
                 newId = Helpers.ForceWadId(value);
+                NotyfyChange();
+                if (
+                    newId.Length > 0 && (
+                        newId[0] != 'C' &&
+                        newId[0] != 'E' &&
+                        newId[0] != 'F' &&
+                        newId[0] != 'J' &&
+                        newId[0] != 'L' &&
+                        newId[0] != 'M' &&
+                        newId[0] != 'N' &&
+                        newId[0] != 'P' &&
+                        newId[0] != 'Q' &&
+                        newId[0] != 'X'
+                    )
+                ) {
+                    frontendMessageDelegate(
+                        "Only C, E, F, J, L, M, N, P, Q or X are allowed as first char on Title ID",
+                        "Warning", RecipeButtonsType.ok
+                    );
+                    newId = "";
+                }
                 validateForm();
                 NotyfyChange();
             }
@@ -247,6 +270,33 @@ namespace Virtual_Console_Numbify_fw
                 NotyfyChange();
             }
         }
+
+        private string updateText = "";
+        public string UpdateText {
+            get { return updateText; }
+            set {
+                updateText = value;
+                NotyfyChange();
+            }
+        }
+
+        private string updateButton = "";
+        public string UpdateButton {
+            get { return updateButton; }
+            set {
+                updateButton = value;
+                NotyfyChange();
+            }
+        }
+
+        private string updateUrl = "";
+        public string UpdateUrl {
+            get { return updateUrl; }
+            set {
+                updateUrl = value;
+                NotyfyChange();
+            }
+        }
         private void NotyfyChange([CallerMemberName] string controlName = ""){
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(controlName));
         }
@@ -265,6 +315,7 @@ namespace Virtual_Console_Numbify_fw
             Inject.ChangeCanExecute();
             BrowseFile.ChangeCanExecute();
             BrowseRom.ChangeCanExecute();
+            DownloadUpdate.ChangeCanExecute();
         }
 
         public void ResetAllFields(){
@@ -631,6 +682,69 @@ namespace Virtual_Console_Numbify_fw
                 }
             };
             f2();
+
+            DownloadUpdate = new Command((object obj) => {
+                Process.Start(UpdateUrl);
+            }, (object obj) => {
+                if (AllFieldsAreEnabled == false) return false;
+                return true;
+            });
+
+            runAsync f3 = async delegate () {
+                try {
+                    var currentTimeStamp = DateTimeOffset.Now.ToUnixTimeSeconds();
+                    long lastCheckTimeStamp = 0;
+                    string serverString = "";
+                    int currentVersionInt = 1;
+                    string checkFile = Path.Combine(Helpers.GetExeDirectory(), "lastUpdateCheck.json");
+                    var checkFileDefinition = new {
+                        lastCheckTimeStamp = 0,
+                        serverString = ""
+                    };
+                    if (File.Exists(checkFile)) {
+                        try {
+                            var checkData = JsonConvert.DeserializeAnonymousType(
+                                File.ReadAllText(checkFile), checkFileDefinition
+                            );
+                            lastCheckTimeStamp = checkData.lastCheckTimeStamp;
+                            serverString = checkData.serverString;
+                        } catch (Exception ex) {
+                            lastCheckTimeStamp = 0;
+                            serverString = "";
+                        }
+                    }
+                    if (currentTimeStamp > lastCheckTimeStamp + (60 * 60 * 24)) {
+                        serverString = await Helpers.GetStringFromInternet("http://localhost/vc-numbify.json");
+                        lastCheckTimeStamp = currentTimeStamp;
+                    }
+                    if (serverString == "") return;
+
+                    try {
+                        var definition = new {
+                            latestVersionInteger = 0,
+                            downloadUrl = "",
+                            updateMessage = "",
+                            updateButton = ""
+                        };
+                        var updateJson = JsonConvert.DeserializeAnonymousType(serverString, definition);
+                        if (currentVersionInt < updateJson.latestVersionInteger) {
+                            UpdateText = updateJson.updateMessage;
+                            UpdateUrl = updateJson.downloadUrl;
+                            UpdateButton = updateJson.updateButton;
+                        }
+
+                        File.WriteAllText(checkFile, JsonConvert.SerializeObject(new {
+                            lastCheckTimeStamp = lastCheckTimeStamp,
+                            serverString = serverString
+                        }));
+                    } catch (Exception ex) {
+                        File.Delete(checkFile);
+                        throw ex;
+                    }
+                } catch (Exception ex) {
+                }
+            };
+            f3();
         }
     }
 }

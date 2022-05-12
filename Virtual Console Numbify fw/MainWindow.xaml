@@ -5,51 +5,58 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Virtual_Console_Numbify_fw" 
         mc:Ignorable="d"
-        ResizeMode="NoResize"
-        Title="Virtual Console Numbify" Height="517" Width="516">
+        ResizeMode="CanMinimize"
+        SizeToContent="WidthAndHeight"
+        Title="Virtual Console Numbify" Height="auto" Width="auto">
     <Window.Resources>
         <local:BooleanToForegroundColorConverter x:Key="BooleanToForegroundColorConverter" />
         <local:BooleanToBackgroundColorConverter x:Key="BooleanToBackgroundColorConverter" />
+        <local:StringIsNotEmptyConverter x:Key="StringIsNotEmptyConverter" />
     </Window.Resources>
-    <Grid x:Name="consoleList" Margin="0,0,0,0">
-        <ComboBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" SelectedValue="{Binding SelectedConsole}"  SelectedValuePath="Key" DisplayMemberPath="Value" x:Name="consoleSelect" HorizontalAlignment="Left" Height="24" Margin="10,70,0,0" VerticalAlignment="Top" Width="269" >
-
-        </ComboBox>
-        <Label Content="Console:" HorizontalAlignment="Left" Margin="6,44,0,0" VerticalAlignment="Top"/>
+    <Grid x:Name="consoleList" Height="500" Width="936">
+        <Label Content="Base Wad File:" HorizontalAlignment="Left" Height="24" Margin="6,0,0,0" VerticalAlignment="Top" Width="144"/>
+        <Label Cursor="Hand" Foreground="Blue" HorizontalAlignment="Left" Margin="182,1,0,0" VerticalAlignment="Top" FontStyle="Normal" Width="105">
+            <TextBlock TextDecorations="Underline" MouseUp="TextBlock_MouseUp">Compatibility List</TextBlock>
+        </Label>
         <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding BaseWad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="wadFile" HorizontalAlignment="Left" Margin="10,24,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197" Height="20"/>
         <Button Command="{Binding BrowseFile}" CommandParameter="BaseWad"  Content="Open ..." HorizontalAlignment="Left" Margin="212,24,0,0" VerticalAlignment="Top" Width="67" />
-        <Label Content="Base Wad File:" HorizontalAlignment="Left" Height="24" Margin="6,0,0,0" VerticalAlignment="Top" Width="144"/>
+        <Label Content="Console:" HorizontalAlignment="Left" Margin="6,44,0,0" VerticalAlignment="Top"/>
+        <ComboBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" SelectedValue="{Binding SelectedConsole}"  SelectedValuePath="Key" DisplayMemberPath="Value" x:Name="consoleSelect" HorizontalAlignment="Left" Height="24" Margin="10,70,0,0" VerticalAlignment="Top" Width="269" >
+        </ComboBox>
+        <Label Content="Rom:" HorizontalAlignment="Left" Margin="6,94,0,0" VerticalAlignment="Top"/>
         <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding RomFileCompletePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="romFile" HorizontalAlignment="Left" Height="20" Margin="10,120,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197"/>
         <Button Command="{Binding BrowseRom}" Content="Open ..." HorizontalAlignment="Left" Margin="213,120,0,0" VerticalAlignment="Top" Width="67" />
-        <Label Content="Rom:" HorizontalAlignment="Left" Margin="6,94,0,0" VerticalAlignment="Top"/>
+        <Label Content="Banner image:" HorizontalAlignment="Left" Margin="6,140,0,0" VerticalAlignment="Top" Height="26"/>
+        <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding BannerImageCompletePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="bannerImageFile" HorizontalAlignment="Left" Margin="10,166,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197" Height="20"/>
+        <Button Command="{Binding BrowseFile}" CommandParameter="BannerImageCompletePath"  Content="Open ..." HorizontalAlignment="Left" Margin="213,166,0,0" VerticalAlignment="Top" Width="67" />
+        <Label Content="Icon:" HorizontalAlignment="Left" Margin="6,186,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.526,0.541" Height="24" Width="60"/>
+        <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding IconImageCompletePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="iconImageFile" HorizontalAlignment="Left" Height="20" Margin="10,210,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197"/>
+        <Button Command="{Binding BrowseFile}" CommandParameter="IconImageCompletePath"  Content="Open ..." HorizontalAlignment="Left" Height="20" Margin="213,210,0,0" VerticalAlignment="Top" Width="67" />
+        <Label Content="Save Icon:" HorizontalAlignment="Left" Margin="6,227,0,0" VerticalAlignment="Top"/>
+        <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding SaveIconCompletePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="saveIcon" HorizontalAlignment="Left" Margin="10,251,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197" Height="20"/>
+        <Button Command="{Binding BrowseFile}" CommandParameter="SaveIconCompletePath"  Content="Open ..." HorizontalAlignment="Left" Margin="213,251,0,0" VerticalAlignment="Top" Width="66" />
+        <Label Content="Channel Title:" HorizontalAlignment="Left" Margin="289,0,0,0" VerticalAlignment="Top" Height="28"/>
+        <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding ChannelNameTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="channelName" HorizontalAlignment="Left" Margin="294,24,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197" Height="20" />
+        <Label Content="Banner Title:    (use ^ to break line)" HorizontalAlignment="Left" Margin="289,44,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.465,0.618"/>
+        <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding BannerTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="bannerTitle" HorizontalAlignment="Left" Margin="294,72,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197" RenderTransformOrigin="0.494,0.503" Height="20"/>
+        <Label Content="Banner Year:" HorizontalAlignment="Left" Margin="289,94,0,0" VerticalAlignment="Top"/>
+        <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding BannerYear, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="bannerYear" HorizontalAlignment="Left" Margin="294,120,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197" Height="19" />
+        <Label Content="Banner Maximum Player Count:" HorizontalAlignment="Left" Margin="289,140,0,0" VerticalAlignment="Top"/>
+        <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding BannerMaximumPlayerCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="playerCount" HorizontalAlignment="Left" Margin="294,166,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197" Height="20" />
+        <Label Content="{Binding SaveNameLabel, Mode=TwoWay}" HorizontalAlignment="Left" Margin="291,185,0,0" VerticalAlignment="Top" Height="26" Width="191"/>
+        <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding SaveName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="saveName" HorizontalAlignment="Left" Margin="294,211,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197" Height="19"/>
+        <Label Content="New ID:    (leave empty to random)" HorizontalAlignment="Left" Margin="291,227,0,0" VerticalAlignment="Top" Height="26"/>
+        <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding NewId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="changeIdBox" HorizontalAlignment="Left" Margin="294,251,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="197" Height="20"/>
+        <CheckBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" IsChecked="{Binding AllowEditing, Mode=TwoWay}" x:Name="manualSave" Content="Allow Manual Editing Save Icon Inject And CCF Extraction" HorizontalAlignment="Left" Margin="10,278,0,0" VerticalAlignment="Top"/>
+        <CheckBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" IsChecked="{Binding UseLz7, Mode=TwoWay}" x:Name="enableLz7" Content="Use lz7 compression" HorizontalAlignment="Left" Margin="363,275,0,0" VerticalAlignment="Top"/>
+        <CheckBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" IsChecked="{Binding PauseOnEveryStep, Mode=TwoWay}" x:Name="pauseBl" Content="Pause process on every step" HorizontalAlignment="Left" Margin="14,447,0,0" VerticalAlignment="Top"/>
+        <CheckBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" IsChecked="{Binding DisableAutoitXAlert, Mode=TwoWay}" x:Name="disableAutoitBl" Content="Disabe AutoitX automation alert" HorizontalAlignment="Left" Margin="188,447,0,0" VerticalAlignment="Top"/>
         <Button Command="{Binding Inject}" Content="Inject !!!" HorizontalAlignment="Left" Margin="363,293,0,0" VerticalAlignment="Top" Height="88" Width="128" FontSize="22" FontFamily="Cascadia Code">
             <Button.Style>
                 <Style/>
             </Button.Style>
         </Button>
-        <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding ChannelNameTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="channelName" HorizontalAlignment="Left" Margin="294,24,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197" Height="20" />
-        <Button Command="{Binding BrowseFile}" CommandParameter="BannerImageCompletePath"  Content="Open ..." HorizontalAlignment="Left" Margin="213,166,0,0" VerticalAlignment="Top" Width="67" />
-        <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding BannerImageCompletePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="bannerImageFile" HorizontalAlignment="Left" Margin="10,166,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197" Height="20"/>
-        <Label Content="Banner image:" HorizontalAlignment="Left" Margin="6,140,0,0" VerticalAlignment="Top" Height="26"/>
-        <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding BannerTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="bannerTitle" HorizontalAlignment="Left" Margin="294,72,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197" RenderTransformOrigin="0.494,0.503" Height="20"/>
-        <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding BannerYear, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="bannerYear" HorizontalAlignment="Left" Margin="294,120,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197" Height="19" />
-        <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding BannerMaximumPlayerCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="playerCount" HorizontalAlignment="Left" Margin="294,166,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197" Height="20" />
-        <Label Content="Banner Title:    (use ^ to break line)" HorizontalAlignment="Left" Margin="289,44,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.465,0.618"/>
-        <Label Content="Banner Year:" HorizontalAlignment="Left" Margin="289,94,0,0" VerticalAlignment="Top"/>
-        <Label Content="Banner Maximum Player Count:" HorizontalAlignment="Left" Margin="289,140,0,0" VerticalAlignment="Top"/>
-        <Label Content="Channel Title:" HorizontalAlignment="Left" Margin="289,0,0,0" VerticalAlignment="Top" Height="28"/>
-        <Label Content="New ID:    (leave empty to random)" HorizontalAlignment="Left" Margin="291,227,0,0" VerticalAlignment="Top" Height="26"/>
-        <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding NewId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="changeIdBox" HorizontalAlignment="Left" Margin="294,251,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="197" Height="20"/>
-        <CheckBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" IsChecked="{Binding UseLz7, Mode=TwoWay}" x:Name="enableLz7" Content="Use lz7 compression" HorizontalAlignment="Left" Margin="363,275,0,0" VerticalAlignment="Top"/>
-        <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding IconImageCompletePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="iconImageFile" HorizontalAlignment="Left" Height="20" Margin="10,210,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197"/>
-        <Button Command="{Binding BrowseFile}" CommandParameter="IconImageCompletePath"  Content="Open ..." HorizontalAlignment="Left" Height="20" Margin="213,210,0,0" VerticalAlignment="Top" Width="67" />
-        <Label Content="Icon:" HorizontalAlignment="Left" Margin="6,186,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.526,0.541" Height="24" Width="60"/>
-        <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding SaveIconCompletePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="saveIcon" HorizontalAlignment="Left" Margin="10,251,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197" Height="20"/>
-        <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding SaveName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="saveName" HorizontalAlignment="Left" Margin="294,211,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197" Height="19"/>
-        <Label Content="{Binding SaveNameLabel, Mode=TwoWay}" HorizontalAlignment="Left" Margin="291,185,0,0" VerticalAlignment="Top" Height="26" Width="191"/>
-        <CheckBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" IsChecked="{Binding AllowEditing, Mode=TwoWay}" x:Name="manualSave" Content="Allow Manual Editing Save Icon Inject And CCF Extraction" HorizontalAlignment="Left" Margin="10,278,0,0" VerticalAlignment="Top"/>
-        <Label Content="Save Icon:" HorizontalAlignment="Left" Margin="6,227,0,0" VerticalAlignment="Top"/>
-        <Button Command="{Binding BrowseFile}" CommandParameter="SaveIconCompletePath"  Content="Open ..." HorizontalAlignment="Left" Margin="213,251,0,0" VerticalAlignment="Top" Width="66" />
+        <Button Visibility="{Binding UpdateButton, Converter={StaticResource StringIsNotEmptyConverter}}" Command="{Binding DownloadUpdate}" Content="{Binding UpdateButton, Mode=TwoWay}" Margin="496,467,10,0" VerticalAlignment="Top" Height="24"/>
         <Rectangle HorizontalAlignment="Left" Height="106" Margin="8,275,0,0" Stroke="Black" VerticalAlignment="Top" Width="347"/>
         <Label Content="Some of the tools used to inject the rom can not be automated" HorizontalAlignment="Left" Margin="10,293,0,0" VerticalAlignment="Top"/>
         <Label Content="in command line, instead, it will be automated with AutoItX, " HorizontalAlignment="Left" Margin="10,309,0,0" VerticalAlignment="Top"/>
@@ -62,10 +69,81 @@
                Background="{Binding StatusAlert, Mode=TwoWay, Converter={StaticResource BooleanToBackgroundColorConverter}}"
                x:Name="statusLabel" HorizontalAlignment="Left" Margin="54,386,0,0" VerticalAlignment="Top" Width="437" FontWeight="Bold"/>
         <ProgressBar Value="{Binding Progress, Mode=TwoWay}" x:Name="progressBar" HorizontalAlignment="Left" Height="25" Margin="10,417,0,0" VerticalAlignment="Top" Width="481"/>
-        <CheckBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" IsChecked="{Binding PauseOnEveryStep, Mode=TwoWay}" x:Name="pauseBl" Content="Pause process on every step" HorizontalAlignment="Left" Margin="14,447,0,0" VerticalAlignment="Top"/>
-        <CheckBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" IsChecked="{Binding DisableAutoitXAlert, Mode=TwoWay}" x:Name="disableAutoitBl" Content="Disabe AutoitX automation alert" HorizontalAlignment="Left" Margin="188,447,0,0" VerticalAlignment="Top"/>
-        <Label Cursor="Hand" Foreground="Blue" HorizontalAlignment="Left" Margin="182,1,0,0" VerticalAlignment="Top" FontStyle="Normal" Width="105">
-            <TextBlock TextDecorations="Underline" MouseUp="TextBlock_MouseUp">Compatibility List</TextBlock>
-        </Label>
+        <RichTextBox IsReadOnly="True" Cursor="Arrow" Focusable="False" Margin="496,10,10,0" Height="402" VerticalAlignment="Top">
+            <RichTextBox.Resources>
+                <Style TargetType="Hyperlink">
+                    <Setter Property="Cursor" Value="Hand" />
+                    <Setter Property="Foreground" Value="Blue" />
+                    <EventSetter Event="MouseLeftButtonDown" Handler="Hyperlink_MouseLeftButtonDown" />
+                </Style>
+            </RichTextBox.Resources>
+            <FlowDocument>
+                <Paragraph FontSize="20" Padding="0" Margin="0" TextAlignment="Center">About</Paragraph>
+                <Paragraph Margin="0,10,0,0">Created by leonardorg (leonardothehuman)</Paragraph>
+                <Paragraph Margin="0">Homepage:
+                    <Hyperlink NavigateUri="https://leonardothehuman.com/">https://leonardothehuman.com/</Hyperlink>
+                </Paragraph>
+                <Paragraph>
+                    This tool is 100% free to use, and licensed under GNU Gpl 3.0 license. If you have paid for this tool, you has been fooled !!!
+                </Paragraph>
+                <Paragraph>
+                    I only could build this tool, because I was standing on the shoulder of giants,
+                    Special thanks for all those wondertful people for creating the tools that Virtual
+                    Console Numbify uses:
+                </Paragraph>
+                <List>
+                    <ListItem>
+                        <Paragraph>
+                            libwiisharp - leathl
+                        </Paragraph>
+                    </ListItem>
+                    <ListItem>
+                        <Paragraph>
+                            wadunpacker.exe - by BFGR
+                        </Paragraph>
+                    </ListItem>
+                    <ListItem>
+                        <Paragraph>
+                            wadtool.exe - by Calantra and DDF
+                        </Paragraph>
+                    </ListItem>
+                    <ListItem>
+                        <Paragraph>
+                            bannertool.exe - by Calantra
+                        </Paragraph>
+                    </ListItem>
+                    <ListItem>
+                        <Paragraph>
+                            wadpacker.exe - by KiKe
+                        </Paragraph>
+                    </ListItem>
+                    <ListItem>
+                        <Paragraph>
+                            sha1 - unknown author
+                        </Paragraph>
+                    </ListItem>
+                    <ListItem>
+                        <Paragraph>
+                            everything else from autoinjectwad - Creffca (AKA Avicr)
+                        </Paragraph>
+                    </ListItem>
+                    <ListItem>
+                        <Paragraph>
+                            Devilken's vistual console injector - DevilKen
+                        </Paragraph>
+                    </ListItem>
+                    <ListItem>
+                        <Paragraph>
+                            HowardC_Tools - HowardC
+                        </Paragraph>
+                    </ListItem>
+                </List>
+                <Paragraph>
+                    If you find a bug you can report it at
+                    <Hyperlink NavigateUri="https://github.com/leonardothehuman/virtual-console-numbify/issues">https://github.com/leonardothehuman/virtual-console-numbify/issues</Hyperlink>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+        <Label Foreground="red" FontSize="14" Content="{Binding UpdateText, Mode=TwoWay}" HorizontalAlignment="Left" Margin="496,417,0,0" VerticalAlignment="Top" Width="430" Height="45"/>
     </Grid>
 </Window>

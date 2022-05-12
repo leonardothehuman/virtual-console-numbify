@@ -4,12 +4,38 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Virtual_Console_Numbify_fw{
     internal class Helpers{
+
+        public static async Task<string> GetStringFromInternet(string url) {
+            try {
+                var request = WebRequest.Create(url);
+                var response = (HttpWebResponse)await Task.Factory.FromAsync<WebResponse>(
+                    request.BeginGetResponse,
+                    request.EndGetResponse,
+                    null
+                );
+                if (response.StatusCode == HttpStatusCode.OK) {
+                    byte[] buffer = new byte[10];
+                    string toReturn = "";
+                    while (true) {
+                        int readedBytesAmmount = await response.GetResponseStream().ReadAsync(buffer, 0, 10);
+                        if (readedBytesAmmount == 0) break;
+                        toReturn += Encoding.UTF8.GetString(buffer, 0, readedBytesAmmount);
+                    }
+                    return toReturn;
+                } else {
+                    throw new Exception("Error on network request");
+                }
+            } catch (Exception ex) {
+                throw ex;
+            }
+        }
 
         public static string RemoveProtocolFromBase(string p) {
             string[] paths = p.Split(':');
