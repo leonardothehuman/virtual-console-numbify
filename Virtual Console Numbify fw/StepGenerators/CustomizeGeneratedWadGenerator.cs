@@ -1,10 +1,11 @@
 ﻿using libWiiSharp;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Virtual_Console_Numbify_fw.InjectionModels;
+using Virtual_Console_Numbify_fw.ViewModels;
 
 namespace Virtual_Console_Numbify_fw.StepGenerators
 {
@@ -82,12 +83,12 @@ namespace Virtual_Console_Numbify_fw.StepGenerators
                 com.reportProgress("Changing wad info ...", toReturn.milestoneList[6]);
                 if (wadTitleId.Trim() != ""){
                     w.ChangeTitleID(LowerTitleID.Channel, wadTitleId.Trim());
-                }else if(env.console == Console.SMS || env.console == Console.N64 || env.console == Console.NGAES){
+                }else if(env.gameConsole == GameConsole.SMS || env.gameConsole == GameConsole.N64 || env.gameConsole == GameConsole.NGAES){
                     var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
                     string newId = "L";
-                    if (env.console == Console.N64) newId = "N";
-                    if (env.console == Console.NGAES) newId = "E";
-                    var random = new Random();
+                    if (env.gameConsole == GameConsole.N64) newId = "N";
+                    if (env.gameConsole == GameConsole.NGAES) newId = "E";
+                    var random = new System.Random();
                     for (int i = 0; i < 3; i++){
                         newId += chars[random.Next(chars.Length)];
                     }

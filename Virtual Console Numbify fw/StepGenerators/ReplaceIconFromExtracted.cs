@@ -1,11 +1,12 @@
 ﻿using AutoItX3Lib;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Virtual_Console_Numbify_fw.InjectionModels;
+using Virtual_Console_Numbify_fw.ViewModels;
 
 namespace Virtual_Console_Numbify_fw.StepGenerators{
     internal class ReplaceIconFromExtracted{
@@ -27,21 +28,21 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                 string verificationText0 = "";
                 string verificationText1 = "";
                 string verificationText2 = "";
-                switch (env.console)
+                switch (env.gameConsole)
                 {
-                    case Console.NES:
+                    case GameConsole.NES:
                         consoleCode = "nes";
                         dropdownString = "NES /FC";
                         verificationText1 = @"Tpl File:  " + tplFile + @" successfully injected into " + appFile + @".";
                         verificationText2 = saveName + @" successflly injected into " + appFile;
                     break;
-                    case Console.SNES:
+                    case GameConsole.SNES:
                         consoleCode = "snes";
                         dropdownString = "SNES /SFC";
                         verificationText1 = @"Tpl File:  " + tplFile + @" successfully copied to " + env.WorkingExtracted05 + @"banner.tpl.";
                         verificationText2 = saveName + @" successflly injected into " + appFile;
                     break;
-                    case Console.N64:
+                    case GameConsole.N64:
                         consoleCode = "n64";
                         dropdownString = "N64";
                         tplFile = Path.Combine(Path.Combine(env.AutoinjectwadPath, @"icons\save_banner.tpl"));
@@ -50,7 +51,7 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                         verificationText1 = @"Tpl File:  " + tplFile + @" successfully injected into save_banner.tpl.";
                         verificationText2 = @"N64 titles successfully Injected!";
                     break;
-                    case Console.SMD:
+                    case GameConsole.SMD:
                         consoleCode = "smd";
                         dropdownString = "Genesis/ Mega Drive";
                         tplFile = Path.Combine(Path.Combine(env.AutoinjectwadPath, @"icons")) + "\\";
@@ -60,7 +61,7 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                         verificationText1 = @"WTE Files Successfully Copied!";
                         verificationText2 = @"Titles Successfully Injected into "+ appFile + @"!";
                     break;
-                    case Console.SMS:
+                    case GameConsole.SMS:
                         consoleCode = "sms";
                         dropdownString = "Master System";
                         tplFile = Path.Combine(Path.Combine(env.AutoinjectwadPath, @"icons")) + "\\";
@@ -88,7 +89,7 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                         verificationText1 = @"WTE Files Successfully Copied!";
                         verificationText2 = @"Titles Successfully Injected into " + appFile + @"!";
                     break;
-                    case Console.PCE:
+                    case GameConsole.PCE:
                         consoleCode = "pce";
                         dropdownString = "Tg-16 / PCE";
                         appFile = Path.Combine(new string[] { env.WorkingExtracted05, @"TITLE.TXT" });
@@ -96,13 +97,13 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                         verificationText1 = tplFile + @" successfully copied to " + env.WorkingExtracted05 + @"savedata.tpl!";
                         verificationText2 = @"Titles Successfully Injected into " + appFile + @"!";
                     break;
-                    case Console.NGAES:
+                    case GameConsole.NGAES:
                         consoleCode = "neogeo";
                         dropdownString = "NeoGeo";
                         appFile = Path.Combine(new string[] { env.WorkingExtracted, @"00000006_app_out" }) + "\\";
                         break;
                     default:
-                        throw new NotImplementedException("The selected console is not supported yet ...");
+                        throw new System.NotImplementedException("The selected console is not supported yet ...");
                 }
                 Directory.CreateDirectory(Path.Combine(env.AutoinjectwadPath, "icons"));
 
@@ -216,7 +217,7 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                         if (successTexts2[1].Trim().ToLower() == verificationText0.Trim().ToLower()){
                             //MessageBox.Show("Injected");
                         }else{
-                            throw new Exception("Failed to inject icon");
+                            throw new System.Exception("Failed to inject icon");
                         }
                     }
 
@@ -231,7 +232,7 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
 
                         MessageBox.Show(successTexts[2].Trim().ToLower());
                         MessageBox.Show(verificationText2.Trim().ToLower());
-                        throw new Exception("Failed to inject icon");
+                        throw new System.Exception("Failed to inject icon");
                     }
                 }
                 else
@@ -251,7 +252,7 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                     );
                     if(cok == false)
                     {
-                        throw new Exception("User reported that something bad happened :-(");
+                        throw new System.Exception("User reported that something bad happened :-(");
                     }
                 }
             };

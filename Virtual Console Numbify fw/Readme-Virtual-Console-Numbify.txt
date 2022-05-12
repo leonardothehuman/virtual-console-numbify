@@ -31,6 +31,8 @@ Net framework 4.8: Needed by Virtual Console Numbify itself, Comes preinstalled 
 for older versions, it can be downloaded at
 https://support.microsoft.com/pt-br/topic/instalador-offline-do-microsoft-net-framework-4-8-para-windows-9d23f658-3b97-68ab-d013-aa3c3e7495e0
 
+common-key.bin: You must extract this file from your own wii and put it into Virtual Console Numbify's directory
+
 Usage:
 -=-=-=
 Just fill all the fields and follow your heart...

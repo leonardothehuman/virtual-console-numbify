@@ -8,8 +8,8 @@
         ResizeMode="NoResize"
         SizeToContent="WidthAndHeight"
         Title="Are you grateful for the life you live?" Height="auto" Width="auto">
-    <Grid Width="757" Height="471">
-        <RichTextBox IsReadOnly="True" Cursor="Arrow" Focusable="False" Margin="10,0,10,51" BorderThickness="0,0,0,0">
+    <Grid Width="757" Height="512">
+        <RichTextBox IsReadOnly="True" Cursor="Arrow" Focusable="False" Margin="10,0,10,53" BorderThickness="0,0,0,0">
             <RichTextBox.Resources>
                 <Style TargetType="Hyperlink">
                     <Setter Property="Cursor" Value="Hand" />
@@ -49,16 +49,17 @@
                         </Paragraph>
                     </ListItem>
                 </List>
+                <Paragraph>You also need to install all prerequisites listed on the file "Readme-Virtual-Console-Numbify.txt" to use this application</Paragraph>
                 <Paragraph>
-                    Understand that this is an automated tool to do things that are not supposed to be done on a fragile system, 
+                    You must understand that this is an automated tool to do things that are not supposed to be done on a fragile system, 
                     and I don't have ways to test all edge cases.
                 </Paragraph>
                 <Paragraph>
                     When you create a virtual console injection, you are creating an
                     <Bold>UNOFFICIAL CHANNEL</Bold> So, you
-                    basically should ensure that you have a way to uninstall it if something goes wrong, and ALWAYS TEST THE
-                    OUTPUT FILE ON AN EMUNAND to make sure that the wad will not mess with Wii's system menu,
-                    testing on Dolphin is not enough, since Dolphin
+                    basically should ensure that you have a way to uninstall it if something goes wrong, and
+                    <Bold>ALWAYS TEST THE OUTPUT FILE ON AN EMUNAND</Bold> to make sure that the wad will not mess with Wii's system menu,
+                    testing on Dolphin is <Bold>NOT</Bold> enough, since Dolphin
                     will not run the banner or other parts of the file that may damage your system if something is wrong.
                 </Paragraph>
                 <Paragraph>
@@ -68,7 +69,7 @@
                 </Paragraph>
             </FlowDocument>
         </RichTextBox>
-        <Button Content="Yes" HorizontalAlignment="Left" Margin="602,425,0,0" VerticalAlignment="Top" Height="38" Width="145" FontSize="22" Click="Button_Click"/>
-        <Button Content="No" HorizontalAlignment="Left" Margin="452,425,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.503" Height="38" Width="145" FontSize="22" Click="Button_Click_1"/>
+        <Button Content="Yes" HorizontalAlignment="Left" Margin="602,464,0,0" VerticalAlignment="Top" Height="38" Width="145" FontSize="22" Click="Button_Click"/>
+        <Button Content="No" HorizontalAlignment="Left" Margin="452,464,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.503" Height="38" Width="145" FontSize="22" Click="Button_Click_1"/>
     </Grid>
 </Window>

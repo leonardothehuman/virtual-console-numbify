@@ -4,17 +4,18 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace Virtual_Console_Numbify_fw {
-    public class BooleanToBackgroundColorConverter : IValueConverter {
+namespace Virtual_Console_Numbify_fw.Converters {
+    internal class StringToVisibilityConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            bool vvalue = (bool)value;
-            if (vvalue == true) {
-                return new SolidColorBrush(Colors.Yellow);
+            string vvalue = (string)value;
+            if (vvalue.Trim() == "") {
+                return Visibility.Hidden;
             } else {
-                return new SolidColorBrush(Colors.Transparent);
+                return Visibility.Visible;
             }
         }
 

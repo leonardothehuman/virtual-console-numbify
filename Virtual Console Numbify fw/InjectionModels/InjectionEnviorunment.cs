@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace Virtual_Console_Numbify_fw{
+namespace Virtual_Console_Numbify_fw.InjectionModels {
     internal class InjectionEnviorunment{
         public string ExternalToolsBasePath = Path.Combine(Helpers.GetExeDirectory(), "externalTools");
         //enviorunment.ExternalToolsBasePath = @"C:\Users\Leonardo\Desktop";
@@ -17,7 +17,7 @@ namespace Virtual_Console_Numbify_fw{
         public string WorkingNeoGeoBannerContainer = "";
         public string ExtractedTitleId;
         public string FinalWadFile;
-        public Console console;
+        public GameConsole gameConsole;
         public string AutoinjectwadPath {
             get{
                 return Path.Combine(ExternalToolsBasePath, "autoinjectwad");

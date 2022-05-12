@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Virtual_Console_Numbify_fw.InjectionModels;
 
 namespace Virtual_Console_Numbify_fw.StepGenerators{
     internal class PackNeoGeoBannerIfInADifferentFile{

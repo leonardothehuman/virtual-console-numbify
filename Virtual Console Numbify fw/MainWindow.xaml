@@ -4,14 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Virtual_Console_Numbify_fw" 
+        xmlns:Converters="clr-namespace:Virtual_Console_Numbify_fw.Converters" 
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
         SizeToContent="WidthAndHeight"
         Title="Virtual Console Numbify" Height="auto" Width="auto">
     <Window.Resources>
-        <local:BooleanToForegroundColorConverter x:Key="BooleanToForegroundColorConverter" />
-        <local:BooleanToBackgroundColorConverter x:Key="BooleanToBackgroundColorConverter" />
-        <local:StringIsNotEmptyConverter x:Key="StringIsNotEmptyConverter" />
+        <Converters:BooleanToForegroundColorConverter x:Key="BooleanToForegroundColorConverter" />
+        <Converters:BooleanToBackgroundColorConverter x:Key="BooleanToBackgroundColorConverter" />
+        <Converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
     </Window.Resources>
     <Grid x:Name="consoleList" Height="500" Width="936">
         <Label Content="Base Wad File:" HorizontalAlignment="Left" Height="24" Margin="6,0,0,0" VerticalAlignment="Top" Width="144"/>
@@ -47,7 +48,7 @@
         <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding SaveName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="saveName" HorizontalAlignment="Left" Margin="294,211,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="197" Height="19"/>
         <Label Content="New ID:    (leave empty to random)" HorizontalAlignment="Left" Margin="291,227,0,0" VerticalAlignment="Top" Height="26"/>
         <TextBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" Text="{Binding NewId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="changeIdBox" HorizontalAlignment="Left" Margin="294,251,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="197" Height="20"/>
-        <CheckBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" IsChecked="{Binding AllowEditing, Mode=TwoWay}" x:Name="manualSave" Content="Allow Manual Editing Save Icon Inject And CCF Extraction" HorizontalAlignment="Left" Margin="10,278,0,0" VerticalAlignment="Top"/>
+        <CheckBox Panel.ZIndex="1" IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" IsChecked="{Binding AllowEditing, Mode=TwoWay}" x:Name="manualSave" Content="Allow Manual Editing Save Icon Inject And CCF Extraction" HorizontalAlignment="Left" Margin="10,278,0,0" VerticalAlignment="Top"/>
         <CheckBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" IsChecked="{Binding UseLz7, Mode=TwoWay}" x:Name="enableLz7" Content="Use lz7 compression" HorizontalAlignment="Left" Margin="363,275,0,0" VerticalAlignment="Top"/>
         <CheckBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" IsChecked="{Binding PauseOnEveryStep, Mode=TwoWay}" x:Name="pauseBl" Content="Pause process on every step" HorizontalAlignment="Left" Margin="14,447,0,0" VerticalAlignment="Top"/>
         <CheckBox IsEnabled="{Binding AllFieldsAreEnabled, Mode=TwoWay}" IsChecked="{Binding DisableAutoitXAlert, Mode=TwoWay}" x:Name="disableAutoitBl" Content="Disabe AutoitX automation alert" HorizontalAlignment="Left" Margin="188,447,0,0" VerticalAlignment="Top"/>
@@ -56,8 +57,8 @@
                 <Style/>
             </Button.Style>
         </Button>
-        <Button Visibility="{Binding UpdateButton, Converter={StaticResource StringIsNotEmptyConverter}}" Command="{Binding DownloadUpdate}" Content="{Binding UpdateButton, Mode=TwoWay}" Margin="496,467,10,0" VerticalAlignment="Top" Height="24"/>
-        <Rectangle HorizontalAlignment="Left" Height="106" Margin="8,275,0,0" Stroke="Black" VerticalAlignment="Top" Width="347"/>
+        <Button Visibility="{Binding UpdateButton, Converter={StaticResource StringToVisibilityConverter}}" Command="{Binding DownloadUpdate}" Content="{Binding UpdateButton, Mode=TwoWay}" Margin="496,467,10,0" VerticalAlignment="Top" Height="24"/>
+        <Rectangle Panel.ZIndex="0" HorizontalAlignment="Left" Height="106" Margin="8,275,0,0" Stroke="Black" VerticalAlignment="Top" Width="347"/>
         <Label Content="Some of the tools used to inject the rom can not be automated" HorizontalAlignment="Left" Margin="10,293,0,0" VerticalAlignment="Top"/>
         <Label Content="in command line, instead, it will be automated with AutoItX, " HorizontalAlignment="Left" Margin="10,309,0,0" VerticalAlignment="Top"/>
         <Label Content="but this method is not perfect, if you receive errors when" HorizontalAlignment="Left" Margin="10,324,0,0" VerticalAlignment="Top" Width="338"/>
@@ -69,7 +70,7 @@
                Background="{Binding StatusAlert, Mode=TwoWay, Converter={StaticResource BooleanToBackgroundColorConverter}}"
                x:Name="statusLabel" HorizontalAlignment="Left" Margin="54,386,0,0" VerticalAlignment="Top" Width="437" FontWeight="Bold"/>
         <ProgressBar Value="{Binding Progress, Mode=TwoWay}" x:Name="progressBar" HorizontalAlignment="Left" Height="25" Margin="10,417,0,0" VerticalAlignment="Top" Width="481"/>
-        <RichTextBox IsReadOnly="True" Cursor="Arrow" Focusable="False" Margin="496,10,10,0" Height="402" VerticalAlignment="Top">
+        <RichTextBox Panel.ZIndex="1" IsReadOnly="True" Cursor="Arrow" Focusable="False" Margin="496,10,10,0" Height="402" VerticalAlignment="Top" BorderThickness="0,0,0,0">
             <RichTextBox.Resources>
                 <Style TargetType="Hyperlink">
                     <Setter Property="Cursor" Value="Hand" />
@@ -84,7 +85,7 @@
                     <Hyperlink NavigateUri="https://leonardothehuman.com/">https://leonardothehuman.com/</Hyperlink>
                 </Paragraph>
                 <Paragraph>
-                    This tool is 100% free to use, and licensed under GNU Gpl 3.0 license. If you have paid for this tool, you has been fooled !!!
+                    This tool is 100% free to use and licensed under GNU GPL 3.0 license. If you have paid for this tool, you have been fooled !!!
                 </Paragraph>
                 <Paragraph>
                     I only could build this tool, because I was standing on the shoulder of giants,
@@ -141,9 +142,12 @@
                 <Paragraph>
                     If you find a bug you can report it at
                     <Hyperlink NavigateUri="https://github.com/leonardothehuman/virtual-console-numbify/issues">https://github.com/leonardothehuman/virtual-console-numbify/issues</Hyperlink>
+                    or
+                    <Hyperlink NavigateUri="https://forms.gle/TrvR7PHUSkXhdTBd9">https://forms.gle/TrvR7PHUSkXhdTBd9</Hyperlink>
                 </Paragraph>
             </FlowDocument>
         </RichTextBox>
         <Label Foreground="red" FontSize="14" Content="{Binding UpdateText, Mode=TwoWay}" HorizontalAlignment="Left" Margin="496,417,0,0" VerticalAlignment="Top" Width="430" Height="45"/>
+        <Rectangle Panel.ZIndex="2" HorizontalAlignment="Left" Height="402" Margin="496,10,0,0" Stroke="Black" VerticalAlignment="Top" Width="430"/>
     </Grid>
 </Window>

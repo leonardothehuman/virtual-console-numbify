@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Virtual_Console_Numbify_fw.InjectionModels;
 
 namespace Virtual_Console_Numbify_fw.StepGenerators{
     internal class PackExtractedWadGenerator{

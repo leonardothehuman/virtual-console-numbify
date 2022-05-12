@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows;
+using Virtual_Console_Numbify_fw.InjectionModels;
+using Virtual_Console_Numbify_fw.ViewModels;
 
 namespace Virtual_Console_Numbify_fw.StepGenerators{
     internal class InjectNewRomGenerator{
@@ -24,33 +25,33 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                 romName = romName.ToLower();
                 bool devilken = false;
                 bool devilkencopydir = false;
-                switch (env.console){
-                    case Console.NES:
+                switch (env.gameConsole){
+                    case GameConsole.NES:
                         consoleCode = "5";
                     break;
-                    case Console.SNES:
+                    case GameConsole.SNES:
                         consoleCode = "1";
                     break;
-                    case Console.N64:
+                    case GameConsole.N64:
                         consoleCode = "2";
                         devilken = true;
                         string v = Path.GetExtension(romFilePath).ToLower();
                         if (v != ".n64" && v != "z64" && v != "v64"){
-                            throw new Exception("Nintendo 64 roms must have .n64, .v64 or .z64 extension ...");
+                            throw new System.Exception("Nintendo 64 roms must have .n64, .v64 or .z64 extension ...");
                         }
                     break;
-                    case Console.SMD:
+                    case GameConsole.SMD:
                         consoleCode = "6";
                     break;
-                    case Console.PCE:
+                    case GameConsole.PCE:
                         consoleCode = "3";
                     break;
-                    case Console.NGAES:
+                    case GameConsole.NGAES:
                         devilken = true;
                         devilkencopydir = true;
                     break;
                     default:
-                        throw new NotImplementedException("The selected console is not supported on InjectNewRom step ...");
+                        throw new System.NotImplementedException("The selected console is not supported on InjectNewRom step ...");
                 }
                 com.reportProgress("Copying rom ...", toReturn.milestoneList[0]);
                 if (devilken){
@@ -58,7 +59,7 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                         "The title id that you will have to type on the terminal will not be used, " +
                         "it will use your choice on the main interface instead", "Alert", RecipeButtonsType.ok
                     );
-                    Helpers.clearDirectory(Path.Combine(env.DevilkenInjectorPath, "ROMS"));
+                    Helpers.ClearDirectory(Path.Combine(env.DevilkenInjectorPath, "ROMS"));
                     if (devilkencopydir){
                         await Helpers.CopyAllFilesOnDirectory(
                             romFilePath, Path.Combine(env.DevilkenInjectorPath, "ROMS"), true

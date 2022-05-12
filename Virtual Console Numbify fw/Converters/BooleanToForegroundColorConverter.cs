@@ -4,18 +4,17 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace Virtual_Console_Numbify_fw {
-    internal class StringIsNotEmptyConverter : IValueConverter {
+namespace Virtual_Console_Numbify_fw.Converters {
+    public class BooleanToForegroundColorConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            string vvalue = (string)value;
-            if (vvalue.Trim() == "") {
-                return Visibility.Hidden;
+            bool vvalue = (bool)value;
+            if (vvalue == true) {
+                return new SolidColorBrush(Colors.Red);
             } else {
-                return Visibility.Visible;
+                return new SolidColorBrush(Colors.Black);
             }
         }
 

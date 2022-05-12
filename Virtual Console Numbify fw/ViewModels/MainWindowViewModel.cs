@@ -13,13 +13,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Virtual_Console_Numbify_fw.InjectionModels;
 using Virtual_Console_Numbify_fw.StepGenerators;
 
-namespace Virtual_Console_Numbify_fw
-{
+namespace Virtual_Console_Numbify_fw.ViewModels {
     public class MainWindowViewModel : INotifyPropertyChanged{
         public VirtualConsoleOptionsManager virtualConsoleOptionsManager = new VirtualConsoleOptionsManager();
         private delegate Task runAsync();
+        private delegate void runSync();
         public Command Inject { get; set; }
         public Command BrowseFile { get; set; }
         public Command BrowseRom { get; set; }
@@ -34,8 +35,8 @@ namespace Virtual_Console_Numbify_fw
             }
         }
 
-        private Console? selectedConsole = null;
-        public Console? SelectedConsole
+        private GameConsole? selectedConsole = null;
+        public GameConsole? SelectedConsole
         {
             get { return selectedConsole; }
             set {
@@ -142,9 +143,9 @@ namespace Virtual_Console_Numbify_fw
             set {
                 string toSet = Helpers.AllowOnlyOneCircunflexDiacritic(value);
                 if(
-                    SelectedConsole == Console.SMS ||
-                    SelectedConsole == Console.SMD
-                //|| SelectedConsole == Console.MSX
+                    SelectedConsole == GameConsole.SMS ||
+                    SelectedConsole == GameConsole.SMD
+                //|| SelectedConsole == GameConsole.MSX
                 ) {
                     toSet = Helpers.BlockCircunflexDiacritic(toSet);
                 }
@@ -304,9 +305,9 @@ namespace Virtual_Console_Numbify_fw
 
         private void validateForm(){
             if (
-                    SelectedConsole == Console.SMS ||
-                    SelectedConsole == Console.SMD
-                //|| SelectedConsole == Console.MSX
+                    SelectedConsole == GameConsole.SMS ||
+                    SelectedConsole == GameConsole.SMD
+                //|| SelectedConsole == GameConsole.MSX
                 ) {
                 SaveNameLabel = "Save Name:";
             } else {
@@ -378,12 +379,12 @@ namespace Virtual_Console_Numbify_fw
             BrowseRom = new Command((object obj) => {
                 runAsync f = async delegate () {
                     string result = "";
-                    if (selectedConsole == Console.NGAES){
+                    if (selectedConsole == GameConsole.NGAES){
                         result = await browseDirectoryDelegate("Select a Neo-Geo AES rom directory");
                     }else{
                         string filter = virtualConsoleOptionsManager.defaultExtensions;
                         if (selectedConsole != null){
-                            filter = virtualConsoleOptionsManager.extensions[(Console)SelectedConsole];
+                            filter = virtualConsoleOptionsManager.extensions[(GameConsole)SelectedConsole];
                         }
                         result = await browseFileDelegate(filter);
                     }
@@ -416,7 +417,7 @@ namespace Virtual_Console_Numbify_fw
                         NewId = NewId.Trim();
 
                         if (!File.Exists(BaseWad)) { throw new Exception("The specified base wad file does not exists"); }
-                        if (selectedConsole == Console.NGAES) {
+                        if (selectedConsole == GameConsole.NGAES) {
                             if (!Directory.Exists(RomFileCompletePath)) {
                                 throw new Exception("The specified rom directory does not exists");
                             }
@@ -448,7 +449,7 @@ namespace Virtual_Console_Numbify_fw
                         //enviorunment.ExternalToolsBasePath = Path.Combine(Helpers.GetExeDirectory(), "externalTools");
                         //enviorunment.ExternalToolsBasePath = @"C:\Users\Leonardo\Desktop";
                         enviorunment.FinalWadFile = fileToSave;
-                        enviorunment.console = (Console)SelectedConsole;
+                        enviorunment.gameConsole = (GameConsole)SelectedConsole;
                         try { File.Delete(System.IO.Path.Combine(enviorunment.AutoinjectwadPath, "initial.wad")); } catch { }
                         await Helpers.CopyFileAsync(
                             BaseWad,
@@ -464,7 +465,7 @@ namespace Virtual_Console_Numbify_fw
                         };
                         recipe.SetFrontendMessageDelegate(frontendMessageDelegate);
 
-                        if (enviorunment.console != Console.SMS){
+                        if (enviorunment.gameConsole != GameConsole.SMS){
                             recipe.AddStep(InjectNewRomGenerator.Generate(RomFileCompletePath));
                         }
                         recipe.AddStep(CustomizeGeneratedWadGenerator.Generate(
@@ -474,17 +475,17 @@ namespace Virtual_Console_Numbify_fw
                         recipe.AddStep(ExtractWadGenerator.Generate());
                         recipe.AddStep(ExtractZeroFiveGenerator.Generate());
 
-                        if (enviorunment.console == Console.NGAES)
+                        if (enviorunment.gameConsole == GameConsole.NGAES)
                             recipe.AddStep(FindNeoGeoBannerBinGenerator.Generate());
 
-                        if (enviorunment.console == Console.SMD || enviorunment.console == Console.SMS){
+                        if (enviorunment.gameConsole == GameConsole.SMD || enviorunment.gameConsole == GameConsole.SMS){
                             recipe.AddStep(ExtractDataCcfGenerator.Generate(AllowEditing, 0, false, DisableAutoitXAlert));
                             recipe.AddStep(ExtractDataCcfGenerator.Generate(AllowEditing, 1, false, DisableAutoitXAlert));
-                        }if (enviorunment.console == Console.SMS){
+                        }if (enviorunment.gameConsole == GameConsole.SMS){
                             recipe.AddStep(ReplaceSMSRom.Generate(RomFileCompletePath));
                         }
 
-                        if (enviorunment.console == Console.NGAES){
+                        if (enviorunment.gameConsole == GameConsole.NGAES){
                             recipe.AddStep(GenerateNeoGeoBannerGenerator.Generate(SaveIconCompletePath, SaveName));
                         }else{
                             recipe.AddStep(ReplaceIconFromExtracted.Generate(
@@ -493,12 +494,12 @@ namespace Virtual_Console_Numbify_fw
                         }
                         recipe.AddStep(RemoveManualFromExtractedGenerator.Generate());
 
-                        if (enviorunment.console == Console.SMD || enviorunment.console == Console.SMS){
+                        if (enviorunment.gameConsole == GameConsole.SMD || enviorunment.gameConsole == GameConsole.SMS){
                             recipe.AddStep(ExtractDataCcfGenerator.Generate(AllowEditing, 1, true, DisableAutoitXAlert));
                             recipe.AddStep(ExtractDataCcfGenerator.Generate(AllowEditing, 0, true, DisableAutoitXAlert));
                         }
 
-                        if (enviorunment.console == Console.NGAES)
+                        if (enviorunment.gameConsole == GameConsole.NGAES)
                             recipe.AddStep(PackNeoGeoBannerIfInADifferentFile.Generate());
 
                         recipe.AddStep(PackZeroFiveGenerator.Generate());
@@ -506,7 +507,7 @@ namespace Virtual_Console_Numbify_fw
                         await recipe.ExecuteSteps();
 
                         await frontendMessageDelegate(
-                            "Your injected virtual console wad has been generated, the Nintendo Wii is " +
+                            "Your injected virtual GameConsole wad has been generated, the Nintendo Wii is " +
                             "a very fragile system, so please, no matter how perfect the injection tool " +
                             "claims to be, always test the wad file on an emunand before installing it on " +
                             "a real nand, and, before installing it on real nand, be sure that you have " +
@@ -537,12 +538,12 @@ namespace Virtual_Console_Numbify_fw
                 }
                 if (SelectedConsole == null){
                     StatusAlert = true;
-                    Status = "You must specify a console for the injection";
+                    Status = "You must specify a GameConsole for the injection";
                     return false;
                 }
                 if (!Helpers.IsAValidWinPath(RomFileCompletePath.Trim())){
                     StatusAlert = true;
-                    if (selectedConsole == Console.NGAES) {
+                    if (selectedConsole == GameConsole.NGAES) {
                         Status = "You must specify a rom directory";
                     } else {
                         Status = "You must specify a rom file";
@@ -642,7 +643,7 @@ namespace Virtual_Console_Numbify_fw
                             RecipeButtonsType.ok
                         );
                         StatusAlert = true;
-                        Status = "You must move Virtual Console Numbify to a valid path.";
+                        Status = "You must move Virtual GameConsole Numbify to a valid path.";
                         return;
                     }
                     InjectionEnviorunment env = new InjectionEnviorunment();
@@ -665,7 +666,7 @@ namespace Virtual_Console_Numbify_fw
                         !File.Exists(Path.Combine(Environment.SystemDirectory, "msvbvm60.dll"))
                     ) {
                         await frontendMessageDelegate(
-                            "Don't forget to read the Readme-Virtual-Console-Numbify.txt file to ensure that all required libraries are installed.\n" +
+                            "Don't forget to read the Readme-Virtual-GameConsole-Numbify.txt file to ensure that all required libraries are installed.\n" +
                             "\n" +
                             "It seems like one of the prerequisites is not installed, but, since I am not sure if the checks are 100% correct, I will let you use the application, just, read the readme.txt file again if something goes wrong and ALWAYS TEST THE OUPUT WAD on an emunand before installing it on the real nand.",
                             "Alert",
@@ -693,40 +694,50 @@ namespace Virtual_Console_Numbify_fw
             runAsync f3 = async delegate () {
                 try {
                     var currentTimeStamp = DateTimeOffset.Now.ToUnixTimeSeconds();
-                    long lastCheckTimeStamp = 0;
-                    string serverString = "";
-                    int currentVersionInt = 1;
+                    int currentVersionInt = Config.CurrentVersion;
                     string checkFile = Path.Combine(Helpers.GetExeDirectory(), "lastUpdateCheck.json");
                     var checkFileDefinition = new {
                         lastCheckTimeStamp = 0,
                         serverString = ""
                     };
-                    if (File.Exists(checkFile)) {
-                        try {
-                            var checkData = JsonConvert.DeserializeAnonymousType(
-                                File.ReadAllText(checkFile), checkFileDefinition
-                            );
-                            lastCheckTimeStamp = checkData.lastCheckTimeStamp;
-                            serverString = checkData.serverString;
-                        } catch (Exception ex) {
-                            lastCheckTimeStamp = 0;
-                            serverString = "";
+                    var updateDefinition = new {
+                        latestVersionInteger = 0,
+                        downloadUrl = "",
+                        updateMessage = "",
+                        updateButton = ""
+                    };
+
+
+                    long lastCheckTimeStamp = 0;
+                    string serverString = "";
+                    runSync checkLocalCache = () => {
+                        if (File.Exists(checkFile)) {
+                            try {
+                                var checkData = JsonConvert.DeserializeAnonymousType(
+                                    File.ReadAllText(checkFile), checkFileDefinition
+                                );
+                                lastCheckTimeStamp = checkData.lastCheckTimeStamp;
+                                serverString = checkData.serverString;
+                            } catch (Exception ex) {
+                                lastCheckTimeStamp = 0;
+                                serverString = "";
+                            }
                         }
-                    }
-                    if (currentTimeStamp > lastCheckTimeStamp + (60 * 60 * 24)) {
-                        serverString = await Helpers.GetStringFromInternet("http://localhost/vc-numbify.json");
-                        lastCheckTimeStamp = currentTimeStamp;
+                    };
+                    checkLocalCache();
+                    
+                    if (currentTimeStamp > lastCheckTimeStamp + Config.UpdateCheckInterval) {
+                        try {
+                            serverString = await Helpers.GetStringFromInternet(Config.UpdateUrl);
+                            lastCheckTimeStamp = currentTimeStamp;
+                        } catch (Exception ex) {
+                            checkLocalCache();
+                        }
                     }
                     if (serverString == "") return;
 
                     try {
-                        var definition = new {
-                            latestVersionInteger = 0,
-                            downloadUrl = "",
-                            updateMessage = "",
-                            updateButton = ""
-                        };
-                        var updateJson = JsonConvert.DeserializeAnonymousType(serverString, definition);
+                        var updateJson = JsonConvert.DeserializeAnonymousType(serverString, updateDefinition);
                         if (currentVersionInt < updateJson.latestVersionInteger) {
                             UpdateText = updateJson.updateMessage;
                             UpdateUrl = updateJson.downloadUrl;

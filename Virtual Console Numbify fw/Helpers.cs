@@ -300,7 +300,7 @@ namespace Virtual_Console_Numbify_fw{
                 { wadFile.BannerApp.ReplaceFile(i, binContainer.ToByteArray()); break; }
         }
 
-        public static void clearDirectory(string dir){
+        public static void ClearDirectory(string dir){
             RemoveAllDirectoriesFromDirectory(dir);
             string[] allFiles = Directory.GetFiles(dir);
             foreach (string file in allFiles){

@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace Virtual_Console_Numbify_fw {
-    public class BooleanToForegroundColorConverter : IValueConverter {
+namespace Virtual_Console_Numbify_fw.Converters {
+    public class BooleanToBackgroundColorConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             bool vvalue = (bool)value;
             if (vvalue == true) {
-                return new SolidColorBrush(Colors.Red);
+                return new SolidColorBrush(Colors.Yellow);
             } else {
-                return new SolidColorBrush(Colors.Black);
+                return new SolidColorBrush(Colors.Transparent);
             }
         }
 

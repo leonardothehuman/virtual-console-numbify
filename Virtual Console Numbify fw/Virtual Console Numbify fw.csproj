@@ -26,7 +26,7 @@
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\Release\</OutputPath>
@@ -70,12 +70,13 @@
     <Compile Include="AlertWindow.xaml.cs">
       <DependentUpon>AlertWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BooleanToBackgroundColorConverter.cs" />
-    <Compile Include="BooleanToForegroundColorConverter.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="Converters\BooleanToBackgroundColorConverter.cs" />
+    <Compile Include="Converters\BooleanToForegroundColorConverter.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="Helpers.cs" />
-    <Compile Include="InjectionEnviorunment.cs" />
-    <Compile Include="StringIsNotEmptyConverter.cs" />
+    <Compile Include="InjectionModels\InjectionEnviorunment.cs" />
+    <Compile Include="Converters\StringIsNotEmptyConverter.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="StepGenerators\CustomizeGeneratedWadGenerator.cs" />
     <Compile Include="StepGenerators\ExtractDataCcfGenerator.cs" />
@@ -91,9 +92,9 @@
     <Compile Include="StepGenerators\RemoveManualFromExtractedGenerator.cs" />
     <Compile Include="StepGenerators\ReplaceIconFromExtracted.cs" />
     <Compile Include="StepGenerators\ReplaceSMSRom.cs" />
-    <Compile Include="VirtualConsoleInjectionRecipe.cs" />
-    <Compile Include="VirtualConsoleInjectionStep.cs" />
-    <Compile Include="ViewModels\VirtualConsoleOptionsManager.cs" />
+    <Compile Include="InjectionModels\VirtualConsoleInjectionRecipe.cs" />
+    <Compile Include="InjectionModels\VirtualConsoleInjectionStep.cs" />
+    <Compile Include="InjectionModels\VirtualConsoleOptionsManager.cs" />
     <Page Include="AlertWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

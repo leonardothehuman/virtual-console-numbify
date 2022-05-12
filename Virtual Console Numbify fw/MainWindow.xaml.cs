@@ -21,6 +21,8 @@ using AutoItX3Lib;
 using Virtual_Console_Numbify_fw.StepGenerators;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using Virtual_Console_Numbify_fw.InjectionModels;
+using Virtual_Console_Numbify_fw.ViewModels;
 
 namespace Virtual_Console_Numbify_fw
 {

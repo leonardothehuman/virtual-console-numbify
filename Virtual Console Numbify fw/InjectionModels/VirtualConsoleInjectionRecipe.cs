@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Virtual_Console_Numbify_fw.InjectionModels;
 
-namespace Virtual_Console_Numbify_fw{
+namespace Virtual_Console_Numbify_fw.InjectionModels {
     public enum RecipeButtonsType{
         ok = 0,
         yesno = 1
