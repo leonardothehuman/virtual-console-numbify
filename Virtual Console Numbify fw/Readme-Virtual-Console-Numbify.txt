@@ -14,6 +14,9 @@ See "GNU-Gpl-3.0.txt" for more information.
 
 Prerequisites:
 -=-=-=-=-=-=-=
+Autoit3: Needed to automate HowardCtools
+Download -> https://www.autoitscript.com/site/autoit/downloads/
+
 ActiveX Control Pad: Needed by HowardCtools
 Download -> http://download.microsoft.com/download/activexcontrolpad/install/4.0.0.950/win98mexp/en-us/setuppad.exe
 

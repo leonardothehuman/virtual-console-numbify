@@ -9,16 +9,26 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Virtual Console Numbify fw"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2B37DC36-EE5A-4F8F-B033-7CE633C1A889}.Debug|x64.ActiveCfg = Debug|x64
+		{2B37DC36-EE5A-4F8F-B033-7CE633C1A889}.Debug|x64.Build.0 = Debug|x64
 		{2B37DC36-EE5A-4F8F-B033-7CE633C1A889}.Debug|x86.ActiveCfg = Debug|x86
 		{2B37DC36-EE5A-4F8F-B033-7CE633C1A889}.Debug|x86.Build.0 = Debug|x86
+		{2B37DC36-EE5A-4F8F-B033-7CE633C1A889}.Release|x64.ActiveCfg = Release|x64
+		{2B37DC36-EE5A-4F8F-B033-7CE633C1A889}.Release|x64.Build.0 = Release|x64
 		{2B37DC36-EE5A-4F8F-B033-7CE633C1A889}.Release|x86.ActiveCfg = Release|x86
 		{2B37DC36-EE5A-4F8F-B033-7CE633C1A889}.Release|x86.Build.0 = Release|x86
+		{A919EE15-7764-431D-923F-4DA47689331B}.Debug|x64.ActiveCfg = Debug|x64
+		{A919EE15-7764-431D-923F-4DA47689331B}.Debug|x64.Build.0 = Debug|x64
 		{A919EE15-7764-431D-923F-4DA47689331B}.Debug|x86.ActiveCfg = Debug|x86
 		{A919EE15-7764-431D-923F-4DA47689331B}.Debug|x86.Build.0 = Debug|x86
+		{A919EE15-7764-431D-923F-4DA47689331B}.Release|x64.ActiveCfg = Release|x64
+		{A919EE15-7764-431D-923F-4DA47689331B}.Release|x64.Build.0 = Release|x64
 		{A919EE15-7764-431D-923F-4DA47689331B}.Release|x86.ActiveCfg = Release|x86
 		{A919EE15-7764-431D-923F-4DA47689331B}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
