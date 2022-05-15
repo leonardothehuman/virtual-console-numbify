@@ -15,6 +15,9 @@ See "GNU-Gpl-3.0.txt" for more information.
 
 ## Prerequisites
 
+Autoit3: Needed to automate HowardCtools
+Download -> https://www.autoitscript.com/site/autoit/downloads/
+
 ActiveX Control Pad: Needed by HowardCtools
 Download -> http://download.microsoft.com/download/activexcontrolpad/install/4.0.0.950/win98mexp/en-us/setuppad.exe
 
@@ -46,6 +49,19 @@ Just fill all the fields and follow your heart...
 - [ ] Commodore 64 support
 
 - [ ] MSX support
+
+- [ ] Automatic byteswap on nintendo 64
+
+## Known Bugs
+- [x] Prerequisites check don't work on x64 version
+
+- [x] Autoit installation is not checked
+
+- [x] Pc engine save title have one single line
+
+- [x] Neo Geo aes save title can't have mote than one line
+
+- [x] Some Master system wad's roms don't have sms extension, so the rom replacement is skipped, one of the base wads affected is Alex Kidd - The Lost Stars (USA) (SMS) (Virtual Console)
 
 ## Credits
 

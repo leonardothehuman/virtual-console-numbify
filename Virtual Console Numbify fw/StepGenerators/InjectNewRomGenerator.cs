@@ -36,7 +36,8 @@ namespace Virtual_Console_Numbify_fw.StepGenerators{
                         consoleCode = "2";
                         devilken = true;
                         string v = Path.GetExtension(romFilePath).ToLower();
-                        if (v != ".n64" && v != "z64" && v != "v64"){
+                        //if (v != ".n64" && v != ".z64" && v != ".v64"){
+                        if (v != ".z64") {
                             throw new System.Exception("Nintendo 64 roms must have .n64, .v64 or .z64 extension ...");
                         }
                     break;

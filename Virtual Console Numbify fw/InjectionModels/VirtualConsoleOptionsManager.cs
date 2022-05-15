@@ -20,7 +20,7 @@ namespace Virtual_Console_Numbify_fw.InjectionModels {
     public class VirtualConsoleOptionsManager{
         public readonly ObservableCollection<KeyValuePair<GameConsole, string>> supportedConsoles = new ObservableCollection<KeyValuePair<GameConsole, string>>();
         public readonly Dictionary<GameConsole, string> extensions = new Dictionary<GameConsole, string>();
-        public readonly string defaultExtensions = "Nes / Famicom rom file (*.nes)|*.nes|Snes / Super Famicom rom file (*.smc; *.sfc)|*.smc;*.sfc|Nintendo 64 rom file (*.n64; *.v64; *.z64)|*.n64;*.v64;*.z64|Mega Drive rom file (*.bin; *.gen; *.smd)|*.bin;*.gen;*.smd|Master System rom file (*.sms)|*.sms|PC Engine rom file (*.pce)|*.pce|All files (*.*)|*.*";
+        public readonly string defaultExtensions = "Nes / Famicom rom file (*.nes)|*.nes|Snes / Super Famicom rom file (*.smc; *.sfc)|*.smc;*.sfc|Nintendo 64 rom file (*.z64)|*.z64|Mega Drive rom file (*.bin; *.gen; *.smd)|*.bin;*.gen;*.smd|Master System rom file (*.sms)|*.sms|PC Engine rom file (*.pce)|*.pce|All files (*.*)|*.*";
         public VirtualConsoleOptionsManager(){
             supportedConsoles.Add(new KeyValuePair<GameConsole, string>(GameConsole.NES, "Nintendo Entertainment System"));
             extensions.Add(GameConsole.NES, "Nes / Famicom rom file (*.nes)|*.nes|All files (*.*)|*.*");
@@ -29,7 +29,7 @@ namespace Virtual_Console_Numbify_fw.InjectionModels {
             extensions.Add(GameConsole.SNES, "Snes / Super Famicom rom file (*.smc; *.sfc)|*.smc;*.sfc|All files (*.*)|*.*");
 
             supportedConsoles.Add(new KeyValuePair<GameConsole, string>(GameConsole.N64, "Nintendo 64"));
-            extensions.Add(GameConsole.N64, "Nintendo 64 rom file (*.n64; *.v64; *.z64)|*.n64;*.v64;*.z64|All files (*.*)|*.*");
+            extensions.Add(GameConsole.N64, "Nintendo 64 rom file (*.z64)|*.z64|All files (*.*)|*.*");
 
             supportedConsoles.Add(new KeyValuePair<GameConsole, string>(GameConsole.SMD, "Sega Mega Drive"));
             extensions.Add(GameConsole.SMD, "Mega Drive rom file (*.bin; *.gen; *.smd; *.md)|*.bin;*.gen;*.smd;*.md|All files (*.*)|*.*");
