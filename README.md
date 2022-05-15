@@ -59,7 +59,7 @@ Just fill all the fields and follow your heart...
 
 - [x] Pc engine save title have one single line
 
-- [x] Neo Geo aes save title can't have mote than one line
+- [x] Neo Geo aes save title can't have more than one line
 
 - [x] Some Master system wad's roms don't have sms extension, so the rom replacement is skipped, one of the base wads affected is Alex Kidd - The Lost Stars (USA) (SMS) (Virtual Console)
 
