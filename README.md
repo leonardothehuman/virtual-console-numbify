@@ -50,7 +50,7 @@ Just fill all the fields and follow your heart...
 
 - [ ] MSX support
 
-- [ ] Automatic byteswap on nintendo 64
+- [ ] Automatic byteswap and compress nintendo 64 roms
 
 ## Known Bugs
 - [x] Prerequisites check don't work on x64 version
