@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
         SizeToContent="WidthAndHeight"
-        Title="Virtual Console Numbify - v0.1" Height="auto" Width="auto">
+        Title="Virtual Console Numbify - v0.2" Height="auto" Width="auto">
     <Window.Resources>
         <Converters:BooleanToForegroundColorConverter x:Key="BooleanToForegroundColorConverter" />
         <Converters:BooleanToBackgroundColorConverter x:Key="BooleanToBackgroundColorConverter" />
@@ -79,7 +79,7 @@
                 </Style>
             </RichTextBox.Resources>
             <FlowDocument>
-                <Paragraph FontSize="20" Padding="0" Margin="0" TextAlignment="Center">About: Virtual Console Numbify - v0.1</Paragraph>
+                <Paragraph FontSize="20" Padding="0" Margin="0" TextAlignment="Center">About: Virtual Console Numbify - v0.2</Paragraph>
                 <Paragraph Margin="0,10,0,0">Created by leonardorg (leonardothehuman)</Paragraph>
                 <Paragraph Margin="0">Homepage:
                     <Hyperlink NavigateUri="https://leonardothehuman.com/">https://leonardothehuman.com/</Hyperlink>
